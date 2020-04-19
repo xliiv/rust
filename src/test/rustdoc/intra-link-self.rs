@@ -27,3 +27,57 @@ impl Bar {
         unimplemented!()
     }
 }
+
+// @has foo/struct.WithSelf.html '//a/@href' '../foo/struct.WithSelf.html#method.basic'
+// @has foo/struct.WithSelf.html '//a/@href' '../foo/struct.WithSelf.html#method.basic_par'
+// @has foo/struct.WithSelf.html '//a/@href' '../foo/struct.WithSelf.html#method.basic_prefix'
+//
+// @has foo/struct.WithSelf.html '//a/@href' '../foo/struct.WithSelf.html#method.name_self'
+// @has foo/struct.WithSelf.html '//a/@href' '../foo/struct.WithSelf.html#method.name_self_par'
+// @has foo/struct.WithSelf.html '//a/@href' '../foo/struct.WithSelf.html#method.name_self_prefix'
+
+pub struct WithSelf;
+
+impl WithSelf {
+    /// [`basic`]
+    ///
+    /// [`basic`]: Self::basic
+    pub fn basic() -> Self {
+        unimplemented!()
+    }
+
+    /// [`basic_par`]
+    ///
+    /// [`basic_par`]: Self::basic_par()
+    pub fn basic_par() -> Self {
+        unimplemented!()
+    }
+
+    /// [`basic_prefix`]
+    ///
+    /// [`basic_prefix`]: method@Self::basic_prefix
+    pub fn basic_prefix() -> Self {
+        unimplemented!()
+    }
+
+    /// [`name_self`]
+    ///
+    /// [`name_self`]: WithSelf::name_self
+    pub fn name_self() -> Self {
+        unimplemented!()
+    }
+
+    /// [`name_self_par`]
+    ///
+    /// [`name_self_par`]: WithSelf::name_self_par()
+    pub fn name_self_par() -> Self {
+        unimplemented!()
+    }
+
+    /// [`name_self_prefix`]
+    ///
+    /// [`name_self_prefix`]: method@WithSelf::name_self_prefix
+    pub fn name_self_prefix() -> Self {
+        unimplemented!()
+    }
+}

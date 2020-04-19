@@ -1,6 +1,11 @@
 use crate::clean::*;
+use regex::Regex;
 
 pub struct StripItem(pub Item);
+
+lazy_static! {
+    static ref SELF_MATCHER: Regex = Regex::new(r"([^A-Za-z_])Self::([a-zA-Z_])").unwrap();
+}
 
 impl StripItem {
     pub fn strip(self) -> Option<Item> {
@@ -50,7 +55,40 @@ pub trait DocFolder: Sized {
                 TraitItem(i)
             }
             ImplItem(mut i) => {
-                i.items = i.items.into_iter().filter_map(|x| self.fold_item(x)).collect();
+                let replacer_opt = if let Type::ResolvedPath { path, .. } = &i.for_ {
+                    path.segments.first().map(|segment| format!("${{1}}{}::${{2}}", segment.name))
+                } else {
+                    None
+                };
+                i.items = i
+                    .items
+                    .into_iter()
+                    .filter_map(|mut x| {
+                        if let (Some(_), Some(replacer)) = (&x.name, &replacer_opt) {
+                            // This whole if block allows to use `Self::<method_name>` in method's doc
+                            // by replacing
+                            // "Self::<method_name>" inside documentation
+                            // with
+                            // <inner.for_.path.segements>::<method>
+                            x.attrs.doc_strings = x
+                                .attrs
+                                .doc_strings
+                                .into_iter()
+                                .map(|doc_frag| {
+                                    if let DocFragment::SugaredDoc(line, span, text) = doc_frag {
+                                        let new_doc_line = SELF_MATCHER
+                                            .replace_all(text.as_ref(), replacer.as_str())
+                                            .to_string();
+                                        DocFragment::SugaredDoc(line, span, new_doc_line)
+                                    } else {
+                                        doc_frag
+                                    }
+                                })
+                                .collect::<Vec<DocFragment>>();
+                        }
+                        self.fold_item(x)
+                    })
+                    .collect();
                 ImplItem(i)
             }
             VariantItem(i) => {
