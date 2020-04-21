@@ -4354,10 +4354,8 @@ name = "rustdoc"
 version = "0.0.0"
 dependencies = [
  "itertools 0.8.0",
- "lazy_static 1.4.0",
  "minifier",
  "pulldown-cmark 0.7.0",
- "regex",
  "rustc-rayon",
  "serde",
  "serde_json",
