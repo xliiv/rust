@@ -55,8 +55,14 @@ pub trait DocFolder: Sized {
                 TraitItem(i)
             }
             ImplItem(mut i) => {
-                let replacer_opt = if let Type::ResolvedPath { path, .. } = &i.for_ {
-                    path.segments.first().map(|segment| format!("${{1}}{}::${{2}}", segment.name))
+                //TODO::: rm it
+                //let replacer_opt = if let Type::ResolvedPath { path, .. } = &i.for_ {
+                //    path.segments.first().map(|segment| format!("${{1}}{}::${{2}}", segment.name))
+                //} else {
+                //    None
+                //};
+                let impl_name = if let Type::ResolvedPath { path, .. } = &i.for_ {
+                    path.segments.first().map(|segment| segment.name.clone())
                 } else {
                     None
                 };
@@ -64,28 +70,30 @@ pub trait DocFolder: Sized {
                     .items
                     .into_iter()
                     .filter_map(|mut x| {
-                        if let (Some(_), Some(replacer)) = (&x.name, &replacer_opt) {
-                            // This whole if block allows to use `Self::<method_name>` in method's doc
-                            // by replacing
-                            // "Self::<method_name>" inside documentation
-                            // with
-                            // <inner.for_.path.segements>::<method>
-                            x.attrs.doc_strings = x
-                                .attrs
-                                .doc_strings
-                                .into_iter()
-                                .map(|doc_frag| {
-                                    if let DocFragment::SugaredDoc(line, span, text) = doc_frag {
-                                        let new_doc_line = SELF_MATCHER
-                                            .replace_all(text.as_ref(), replacer.as_str())
-                                            .to_string();
-                                        DocFragment::SugaredDoc(line, span, new_doc_line)
-                                    } else {
-                                        doc_frag
-                                    }
-                                })
-                                .collect::<Vec<DocFragment>>();
-                        }
+                        //TODO::: rm it
+                        //if let (Some(_), Some(replacer)) = (&x.name, &replacer_opt) {
+                        //    // This whole if block allows to use `Self::<method_name>` in method's doc
+                        //    // by replacing
+                        //    // "Self::<method_name>" inside documentation
+                        //    // with
+                        //    // <inner.for_.path.segements>::<method>
+                        //    x.attrs.doc_strings = x
+                        //        .attrs
+                        //        .doc_strings
+                        //        .into_iter()
+                        //        .map(|doc_frag| {
+                        //            if let DocFragment::SugaredDoc(line, span, text) = doc_frag {
+                        //                let new_doc_line = SELF_MATCHER
+                        //                    .replace_all(text.as_ref(), replacer.as_str())
+                        //                    .to_string();
+                        //                DocFragment::SugaredDoc(line, span, new_doc_line)
+                        //            } else {
+                        //                doc_frag
+                        //            }
+                        //        })
+                        //        .collect::<Vec<DocFragment>>();
+                        //}
+                        x.attrs.impl_name = impl_name.clone();
                         self.fold_item(x)
                     })
                     .collect();

@@ -428,7 +428,7 @@ impl<'a, 'tcx> DocFolder for LinkCollector<'a, 'tcx> {
             };
             let (res, fragment) = {
                 let mut kind = None;
-                let path_str = if let Some(prefix) =
+                let mut path_str = if let Some(prefix) =
                     ["struct@", "enum@", "type@", "trait@", "union@"]
                         .iter()
                         .find(|p| link.starts_with(**p))
@@ -481,6 +481,19 @@ impl<'a, 'tcx> DocFolder for LinkCollector<'a, 'tcx> {
                 // parent_node first.
                 let base_node =
                     if item.is_mod() && item.attrs.inner_docs { None } else { parent_node };
+
+
+                //TODO::: clean it
+                dbg!(&path_str);
+                //let u: u32 = path_str;
+                let no_self = if let (true, Some(name)) = (path_str.starts_with("Self::"), item.attrs.impl_name.as_ref()) {
+                    path_str.replace("Self::", &format!("{}::", name.as_str()))//.as_str()
+                } else {
+                    //TODO: use &str if possible
+                    path_str.to_string()
+                };
+                path_str = no_self.as_str();
+                dbg!(&path_str);
 
                 match kind {
                     Some(ns @ ValueNS) => {

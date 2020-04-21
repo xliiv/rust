@@ -1,5 +1,7 @@
 #![crate_name = "foo"]
 
+// TODO::: rm it
+// has foo/struct.WithSelf.html '//a/@href' '../foo/struct.WithSelf.html#method.force_failure'
 // @has foo/index.html '//a/@href' '../foo/struct.Foo.html#method.new'
 // @has foo/struct.Foo.html '//a/@href' '../foo/struct.Foo.html#method.new'
 
@@ -28,7 +30,7 @@ impl Bar {
     }
 }
 
-// TODO: make it seperatly because it inteferes with item inside impl
+// TODO::: make it seperatly because it inteferes with item inside impl
 // has foo/index.html '//a/@href' '../foo/struct.WithSelf.html#structfield.u8_field'
 // /// [`u8_field`]
 // ///
@@ -37,7 +39,7 @@ pub struct WithSelf {
 // @has foo/struct.WithSelf.html '//a/@href' '../foo/struct.WithSelf.html#structfield.u8_field'
     /// [`u8_field`]
     ///
-    // TODO: fix it
+    // TODO::: fix it
     // /// [`u8_field`]: Self::u8_field
     /// [`u8_field`]: WithSelf::u8_field
     pub u8_field: u8
@@ -45,6 +47,7 @@ pub struct WithSelf {
 
 impl WithSelf {
 // @has foo/struct.WithSelf.html '//a/@href' '../foo/struct.WithSelf.html#method.basic'
+// TODO::: rm it
 // @has foo/struct.WithSelf.html '//a/@href' '../foo/struct.WithSelf.html#method.basic_par'
 // @has foo/struct.WithSelf.html '//a/@href' '../foo/struct.WithSelf.html#method.basic_prefix'
     /// [`basic`]
@@ -69,6 +72,7 @@ impl WithSelf {
     }
 
 // @has foo/struct.WithSelf.html '//a/@href' '../foo/struct.WithSelf.html#method.name_self'
+// TODO::: rm it
 // @has foo/struct.WithSelf.html '//a/@href' '../foo/struct.WithSelf.html#method.name_self_par'
 // @has foo/struct.WithSelf.html '//a/@href' '../foo/struct.WithSelf.html#method.name_self_prefix'
 
