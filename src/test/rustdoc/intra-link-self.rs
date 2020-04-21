@@ -28,17 +28,25 @@ impl Bar {
     }
 }
 
+// TODO: make it seperatly because it inteferes with item inside impl
+// has foo/index.html '//a/@href' '../foo/struct.WithSelf.html#structfield.u8_field'
+// /// [`u8_field`]
+// ///
+// /// [`u8_field`]: Self::u8_field
+pub struct WithSelf {
+// @has foo/struct.WithSelf.html '//a/@href' '../foo/struct.WithSelf.html#structfield.u8_field'
+    /// [`u8_field`]
+    ///
+    // TODO: fix it
+    // /// [`u8_field`]: Self::u8_field
+    /// [`u8_field`]: WithSelf::u8_field
+    pub u8_field: u8
+}
+
+impl WithSelf {
 // @has foo/struct.WithSelf.html '//a/@href' '../foo/struct.WithSelf.html#method.basic'
 // @has foo/struct.WithSelf.html '//a/@href' '../foo/struct.WithSelf.html#method.basic_par'
 // @has foo/struct.WithSelf.html '//a/@href' '../foo/struct.WithSelf.html#method.basic_prefix'
-//
-// @has foo/struct.WithSelf.html '//a/@href' '../foo/struct.WithSelf.html#method.name_self'
-// @has foo/struct.WithSelf.html '//a/@href' '../foo/struct.WithSelf.html#method.name_self_par'
-// @has foo/struct.WithSelf.html '//a/@href' '../foo/struct.WithSelf.html#method.name_self_prefix'
-
-pub struct WithSelf;
-
-impl WithSelf {
     /// [`basic`]
     ///
     /// [`basic`]: Self::basic
@@ -59,6 +67,10 @@ impl WithSelf {
     pub fn basic_prefix() -> Self {
         unimplemented!()
     }
+
+// @has foo/struct.WithSelf.html '//a/@href' '../foo/struct.WithSelf.html#method.name_self'
+// @has foo/struct.WithSelf.html '//a/@href' '../foo/struct.WithSelf.html#method.name_self_par'
+// @has foo/struct.WithSelf.html '//a/@href' '../foo/struct.WithSelf.html#method.name_self_prefix'
 
     /// [`name_self`]
     ///
