@@ -36,64 +36,34 @@ impl Bar {
 // ///
 // /// [`u8_field`]: Self::u8_field
 pub struct WithSelf {
+
 // @has foo/struct.WithSelf.html '//a/@href' '../foo/struct.WithSelf.html#structfield.u8_field'
+
     /// [`u8_field`]
     ///
-    // TODO::: fix it
+    // TODO::: make it work
     // /// [`u8_field`]: Self::u8_field
     /// [`u8_field`]: WithSelf::u8_field
     pub u8_field: u8
 }
 
 impl WithSelf {
+
 // @has foo/struct.WithSelf.html '//a/@href' '../foo/struct.WithSelf.html#method.basic'
-// TODO::: rm it
-// @has foo/struct.WithSelf.html '//a/@href' '../foo/struct.WithSelf.html#method.basic_par'
-// @has foo/struct.WithSelf.html '//a/@href' '../foo/struct.WithSelf.html#method.basic_prefix'
+
     /// [`basic`]
     ///
     /// [`basic`]: Self::basic
-    pub fn basic() -> Self {
-        unimplemented!()
-    }
-
-    /// [`basic_par`]
-    ///
-    /// [`basic_par`]: Self::basic_par()
-    pub fn basic_par() -> Self {
-        unimplemented!()
-    }
-
-    /// [`basic_prefix`]
-    ///
-    /// [`basic_prefix`]: method@Self::basic_prefix
-    pub fn basic_prefix() -> Self {
+    pub fn basic() {
         unimplemented!()
     }
 
 // @has foo/struct.WithSelf.html '//a/@href' '../foo/struct.WithSelf.html#method.name_self'
-// TODO::: rm it
-// @has foo/struct.WithSelf.html '//a/@href' '../foo/struct.WithSelf.html#method.name_self_par'
-// @has foo/struct.WithSelf.html '//a/@href' '../foo/struct.WithSelf.html#method.name_self_prefix'
 
     /// [`name_self`]
     ///
     /// [`name_self`]: WithSelf::name_self
-    pub fn name_self() -> Self {
-        unimplemented!()
-    }
-
-    /// [`name_self_par`]
-    ///
-    /// [`name_self_par`]: WithSelf::name_self_par()
-    pub fn name_self_par() -> Self {
-        unimplemented!()
-    }
-
-    /// [`name_self_prefix`]
-    ///
-    /// [`name_self_prefix`]: method@WithSelf::name_self_prefix
-    pub fn name_self_prefix() -> Self {
+    pub fn name_self() {
         unimplemented!()
     }
 }
