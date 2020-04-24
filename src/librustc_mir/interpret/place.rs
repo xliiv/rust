@@ -135,12 +135,6 @@ impl<Tag> MemPlace<Tag> {
         MemPlace { ptr, align, meta: MemPlaceMeta::None }
     }
 
-    /// Produces a Place that will error if attempted to be read from or written to
-    #[inline(always)]
-    fn null(cx: &impl HasDataLayout) -> Self {
-        Self::from_scalar_ptr(Scalar::null_ptr(cx), Align::from_bytes(1).unwrap())
-    }
-
     #[inline(always)]
     pub fn from_ptr(ptr: Pointer<Tag>, align: Align) -> Self {
         Self::from_scalar_ptr(ptr.into(), align)
@@ -260,12 +254,6 @@ impl<'tcx, Tag: ::std::fmt::Debug + Copy> OpTy<'tcx, Tag> {
 }
 
 impl<Tag: ::std::fmt::Debug> Place<Tag> {
-    /// Produces a Place that will error if attempted to be read from or written to
-    #[inline(always)]
-    fn null(cx: &impl HasDataLayout) -> Self {
-        Place::Ptr(MemPlace::null(cx))
-    }
-
     #[inline]
     pub fn assert_mem_place(self) -> MemPlace<Tag> {
         match self {
@@ -333,7 +321,7 @@ where
         let val = self.read_immediate(src)?;
         trace!("deref to {} on {:?}", val.layout.ty, *val);
         let place = self.ref_to_mplace(val)?;
-        self.mplace_access_checked(place)
+        self.mplace_access_checked(place, None)
     }
 
     /// Check if the given place is good for memory access with the given
@@ -358,15 +346,20 @@ where
 
     /// Return the "access-checked" version of this `MPlace`, where for non-ZST
     /// this is definitely a `Pointer`.
+    ///
+    /// `force_align` must only be used when correct alignment does not matter,
+    /// like in Stacked Borrows.
     pub fn mplace_access_checked(
         &self,
         mut place: MPlaceTy<'tcx, M::PointerTag>,
+        force_align: Option<Align>,
     ) -> InterpResult<'tcx, MPlaceTy<'tcx, M::PointerTag>> {
         let (size, align) = self
             .size_and_align_of_mplace(place)?
             .unwrap_or((place.layout.size, place.layout.align.abi));
         assert!(place.mplace.align <= align, "dynamic alignment less strict than static one?");
-        place.mplace.align = align; // maximally strict checking
+        // Check (stricter) dynamic alignment, unless forced otherwise.
+        place.mplace.align = force_align.unwrap_or(align);
         // When dereferencing a pointer, it must be non-NULL, aligned, and live.
         if let Some(ptr) = self.check_mplace_access(place, Some(size))? {
             place.mplace.ptr = ptr.into();
@@ -636,35 +629,10 @@ where
         &mut self,
         place: mir::Place<'tcx>,
     ) -> InterpResult<'tcx, PlaceTy<'tcx, M::PointerTag>> {
-        let mut place_ty = match place.local {
-            mir::RETURN_PLACE => {
-                // `return_place` has the *caller* layout, but we want to use our
-                // `layout to verify our assumption. The caller will validate
-                // their layout on return.
-                PlaceTy {
-                    place: match self.frame().return_place {
-                        Some(p) => *p,
-                        // Even if we don't have a return place, we sometimes need to
-                        // create this place, but any attempt to read from / write to it
-                        // (even a ZST read/write) needs to error, so let us make this
-                        // a NULL place.
-                        //
-                        // FIXME: Ideally we'd make sure that the place projections also
-                        // bail out.
-                        None => Place::null(&*self),
-                    },
-                    layout: self.layout_of(
-                        self.subst_from_current_frame_and_normalize_erasing_regions(
-                            self.frame().body.return_ty(),
-                        ),
-                    )?,
-                }
-            }
-            local => PlaceTy {
-                // This works even for dead/uninitialized locals; we check further when writing
-                place: Place::Local { frame: self.frame_idx(), local },
-                layout: self.layout_of_local(self.frame(), local, None)?,
-            },
+        let mut place_ty = PlaceTy {
+            // This works even for dead/uninitialized locals; we check further when writing
+            place: Place::Local { frame: self.frame_idx(), local: place.local },
+            layout: self.layout_of_local(self.frame(), place.local, None)?,
         };
 
         for elem in place.projection.iter() {

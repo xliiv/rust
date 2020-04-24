@@ -14,9 +14,7 @@ use crate::middle::cstore::EncodedMetadata;
 use crate::middle::resolve_lifetime::{self, ObjectLifetimeDefault};
 use crate::middle::stability;
 use crate::mir::interpret::{Allocation, ConstValue, Scalar};
-use crate::mir::{
-    interpret, BodyAndCache, Field, Local, Place, PlaceElem, ProjectionKind, Promoted,
-};
+use crate::mir::{interpret, Body, Field, Local, Place, PlaceElem, ProjectionKind, Promoted};
 use crate::traits;
 use crate::traits::{Clause, Clauses, Goal, GoalKind, Goals};
 use crate::ty::query;
@@ -298,14 +296,14 @@ pub struct ResolvedOpaqueTy<'tcx> {
 ///
 /// ```ignore (pseudo-Rust)
 /// async move {
-///     let x: T = ...;
+///     let x: T = expr;
 ///     foo.await
 ///     ...
 /// }
 /// ```
 ///
-/// Here, we would store the type `T`, the span of the value `x`, and the "scope-span" for
-/// the scope that contains `x`.
+/// Here, we would store the type `T`, the span of the value `x`, the "scope-span" for
+/// the scope that contains `x`, the expr `T` evaluated from, and the span of `foo.await`.
 #[derive(RustcEncodable, RustcDecodable, Clone, Debug, Eq, Hash, PartialEq, HashStable)]
 pub struct GeneratorInteriorTypeCause<'tcx> {
     /// Type of the captured binding.
@@ -314,6 +312,8 @@ pub struct GeneratorInteriorTypeCause<'tcx> {
     pub span: Span,
     /// Span of the scope of the captured binding.
     pub scope_span: Option<Span>,
+    /// Span of `.await` or `yield` expression.
+    pub yield_span: Span,
     /// Expr which the type evaluated from.
     pub expr: Option<hir::HirId>,
 }
@@ -991,21 +991,21 @@ pub struct GlobalCtxt<'tcx> {
 }
 
 impl<'tcx> TyCtxt<'tcx> {
-    pub fn alloc_steal_mir(self, mir: BodyAndCache<'tcx>) -> &'tcx Steal<BodyAndCache<'tcx>> {
+    pub fn alloc_steal_mir(self, mir: Body<'tcx>) -> &'tcx Steal<Body<'tcx>> {
         self.arena.alloc(Steal::new(mir))
     }
 
     pub fn alloc_steal_promoted(
         self,
-        promoted: IndexVec<Promoted, BodyAndCache<'tcx>>,
-    ) -> &'tcx Steal<IndexVec<Promoted, BodyAndCache<'tcx>>> {
+        promoted: IndexVec<Promoted, Body<'tcx>>,
+    ) -> &'tcx Steal<IndexVec<Promoted, Body<'tcx>>> {
         self.arena.alloc(Steal::new(promoted))
     }
 
     pub fn intern_promoted(
         self,
-        promoted: IndexVec<Promoted, BodyAndCache<'tcx>>,
-    ) -> &'tcx IndexVec<Promoted, BodyAndCache<'tcx>> {
+        promoted: IndexVec<Promoted, Body<'tcx>>,
+    ) -> &'tcx IndexVec<Promoted, Body<'tcx>> {
         self.arena.alloc(promoted)
     }
 
@@ -1413,7 +1413,7 @@ impl<'tcx> TyCtxt<'tcx> {
             _ => return None, // not a free region
         };
 
-        let hir_id = self.hir().as_local_hir_id(suitable_region_binding_scope).unwrap();
+        let hir_id = self.hir().as_local_hir_id(suitable_region_binding_scope.expect_local());
         let is_impl_item = match self.hir().find(hir_id) {
             Some(Node::Item(..) | Node::TraitItem(..)) => false,
             Some(Node::ImplItem(..)) => {
@@ -1431,7 +1431,7 @@ impl<'tcx> TyCtxt<'tcx> {
 
     pub fn return_type_impl_trait(&self, scope_def_id: DefId) -> Option<(Ty<'tcx>, Span)> {
         // HACK: `type_of_def_id()` will fail on these (#55796), so return `None`.
-        let hir_id = self.hir().as_local_hir_id(scope_def_id).unwrap();
+        let hir_id = self.hir().as_local_hir_id(scope_def_id.expect_local());
         match self.hir().get(hir_id) {
             Node::Item(item) => {
                 match item.kind {

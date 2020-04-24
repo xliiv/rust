@@ -808,6 +808,7 @@ pub fn take<T: Default>(dest: &mut T) -> T {
 /// [`Clone`]: ../../std/clone/trait.Clone.html
 #[inline]
 #[stable(feature = "rust1", since = "1.0.0")]
+#[must_use = "if you don't need the old value, you can just assign the new value directly"]
 pub fn replace<T>(dest: &mut T, mut src: T) -> T {
     swap(dest, &mut src);
     src
@@ -923,7 +924,12 @@ pub fn drop<T>(_x: T) {}
 #[inline]
 #[stable(feature = "rust1", since = "1.0.0")]
 pub unsafe fn transmute_copy<T, U>(src: &T) -> U {
-    ptr::read_unaligned(src as *const T as *const U)
+    // If U has a higher alignment requirement, src may not be suitably aligned.
+    if align_of::<U>() > align_of::<T>() {
+        ptr::read_unaligned(src as *const T as *const U)
+    } else {
+        ptr::read(src as *const T as *const U)
+    }
 }
 
 /// Opaque type representing the discriminant of an enum.

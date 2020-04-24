@@ -8,16 +8,16 @@ use rustc_ast::ast::Mutability;
 use rustc_data_structures::fx::FxHashMap;
 use rustc_hir::def::DefKind;
 use rustc_hir::HirId;
+use rustc_index::bit_set::BitSet;
 use rustc_index::vec::IndexVec;
 use rustc_middle::mir::interpret::{InterpResult, Scalar};
 use rustc_middle::mir::visit::{
     MutVisitor, MutatingUseContext, NonMutatingUseContext, PlaceContext, Visitor,
 };
 use rustc_middle::mir::{
-    read_only, AggregateKind, AssertKind, BasicBlock, BinOp, Body, BodyAndCache, ClearCrossCrate,
-    Constant, Local, LocalDecl, LocalKind, Location, Operand, Place, ReadOnlyBodyAndCache, Rvalue,
-    SourceInfo, SourceScope, SourceScopeData, Statement, StatementKind, Terminator, TerminatorKind,
-    UnOp, RETURN_PLACE,
+    AggregateKind, AssertKind, BasicBlock, BinOp, Body, ClearCrossCrate, Constant, Local,
+    LocalDecl, LocalKind, Location, Operand, Place, Rvalue, SourceInfo, SourceScope,
+    SourceScopeData, Statement, StatementKind, Terminator, TerminatorKind, UnOp, RETURN_PLACE,
 };
 use rustc_middle::ty::layout::{HasTyCtxt, LayoutError, TyAndLayout};
 use rustc_middle::ty::subst::{InternalSubsts, Subst};
@@ -59,17 +59,14 @@ macro_rules! throw_machine_stop_str {
 pub struct ConstProp;
 
 impl<'tcx> MirPass<'tcx> for ConstProp {
-    fn run_pass(&self, tcx: TyCtxt<'tcx>, source: MirSource<'tcx>, body: &mut BodyAndCache<'tcx>) {
+    fn run_pass(&self, tcx: TyCtxt<'tcx>, source: MirSource<'tcx>, body: &mut Body<'tcx>) {
         // will be evaluated by miri and produce its errors there
         if source.promoted.is_some() {
             return;
         }
 
         use rustc_middle::hir::map::blocks::FnLikeNode;
-        let hir_id = tcx
-            .hir()
-            .as_local_hir_id(source.def_id())
-            .expect("Non-local call to local provider is_const_fn");
+        let hir_id = tcx.hir().as_local_hir_id(source.def_id().expect_local());
 
         let is_fn_like = FnLikeNode::from_node(tcx.hir().get(hir_id)).is_some();
         let is_assoc_const = match tcx.def_kind(source.def_id()) {
@@ -150,8 +147,7 @@ impl<'tcx> MirPass<'tcx> for ConstProp {
         // constants, instead of just checking for const-folding succeeding.
         // That would require an uniform one-def no-mutation analysis
         // and RPO (or recursing when needing the value of a local).
-        let mut optimization_finder =
-            ConstPropagator::new(read_only!(body), dummy_body, tcx, source);
+        let mut optimization_finder = ConstPropagator::new(body, dummy_body, tcx, source);
         optimization_finder.visit_body(body);
 
         trace!("ConstProp done for {:?}", source.def_id());
@@ -331,7 +327,6 @@ struct ConstPropagator<'mir, 'tcx> {
     // by accessing them through `ecx` instead.
     source_scopes: IndexVec<SourceScope, SourceScopeData>,
     local_decls: IndexVec<Local, LocalDecl<'tcx>>,
-    ret: Option<OpTy<'tcx, ()>>,
     // Because we have `MutVisitor` we can't obtain the `SourceInfo` from a `Location`. So we store
     // the last known `SourceInfo` here and just keep revisiting it.
     source_info: Option<SourceInfo>,
@@ -362,7 +357,7 @@ impl<'mir, 'tcx> HasTyCtxt<'tcx> for ConstPropagator<'mir, 'tcx> {
 
 impl<'mir, 'tcx> ConstPropagator<'mir, 'tcx> {
     fn new(
-        body: ReadOnlyBodyAndCache<'_, 'tcx>,
+        body: &Body<'tcx>,
         dummy_body: &'mir Body<'tcx>,
         tcx: TyCtxt<'tcx>,
         source: MirSource<'tcx>,
@@ -403,22 +398,19 @@ impl<'mir, 'tcx> ConstPropagator<'mir, 'tcx> {
             source_scopes: body.source_scopes.clone(),
             //FIXME(wesleywiser) we can't steal this because `Visitor::super_visit_body()` needs it
             local_decls: body.local_decls.clone(),
-            ret: ret.map(Into::into),
             source_info: None,
         }
     }
 
     fn get_const(&self, local: Local) -> Option<OpTy<'tcx>> {
-        if local == RETURN_PLACE {
-            // Try to read the return place as an immediate so that if it is representable as a
-            // scalar, we can handle it as such, but otherwise, just return the value as is.
-            return match self.ret.map(|ret| self.ecx.try_read_immediate(ret)) {
-                Some(Ok(Ok(imm))) => Some(imm.into()),
-                _ => self.ret,
-            };
-        }
+        let op = self.ecx.access_local(self.ecx.frame(), local, None).ok();
 
-        self.ecx.access_local(self.ecx.frame(), local, None).ok()
+        // Try to read the local as an immediate so that if it is representable as a scalar, we can
+        // handle it as such, but otherwise, just return the value as is.
+        match op.map(|ret| self.ecx.try_read_immediate(ret)) {
+            Some(Ok(Ok(imm))) => Some(imm.into()),
+            _ => op,
+        }
     }
 
     fn remove_const(&mut self, local: Local) {
@@ -777,15 +769,15 @@ enum ConstPropMode {
 struct CanConstProp {
     can_const_prop: IndexVec<Local, ConstPropMode>,
     // false at the beginning, once set, there are not allowed to be any more assignments
-    found_assignment: IndexVec<Local, bool>,
+    found_assignment: BitSet<Local>,
 }
 
 impl CanConstProp {
     /// returns true if `local` can be propagated
-    fn check(body: ReadOnlyBodyAndCache<'_, '_>) -> IndexVec<Local, ConstPropMode> {
+    fn check(body: &Body<'_>) -> IndexVec<Local, ConstPropMode> {
         let mut cpv = CanConstProp {
             can_const_prop: IndexVec::from_elem(ConstPropMode::FullConstProp, &body.local_decls),
-            found_assignment: IndexVec::from_elem(false, &body.local_decls),
+            found_assignment: BitSet::new_empty(body.local_decls.len()),
         };
         for (local, val) in cpv.can_const_prop.iter_enumerated_mut() {
             // cannot use args at all
@@ -813,11 +805,9 @@ impl<'tcx> Visitor<'tcx> for CanConstProp {
             // FIXME(oli-obk): we could be more powerful here, if the multiple writes
             // only occur in independent execution paths
             MutatingUse(MutatingUseContext::Store) => {
-                if self.found_assignment[local] {
+                if !self.found_assignment.insert(local) {
                     trace!("local {:?} can't be propagated because of multiple assignments", local);
                     self.can_const_prop[local] = ConstPropMode::NoPropagation;
-                } else {
-                    self.found_assignment[local] = true
                 }
             }
             // Reading constants is allowed an arbitrary number of times
@@ -838,6 +828,12 @@ impl<'tcx> Visitor<'tcx> for CanConstProp {
 impl<'mir, 'tcx> MutVisitor<'tcx> for ConstPropagator<'mir, 'tcx> {
     fn tcx(&self) -> TyCtxt<'tcx> {
         self.tcx
+    }
+
+    fn visit_body(&mut self, body: &mut Body<'tcx>) {
+        for (bb, data) in body.basic_blocks_mut().iter_enumerated_mut() {
+            self.visit_basic_block_data(bb, data);
+        }
     }
 
     fn visit_constant(&mut self, constant: &mut Constant<'tcx>, location: Location) {
