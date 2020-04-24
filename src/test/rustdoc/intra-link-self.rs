@@ -1,5 +1,13 @@
 #![crate_name = "foo"]
 
+// TODO
+// https://doc.rust-lang.org/reference/items/structs.html
+// https://doc.rust-lang.org/reference/items/enumerations.html
+// https://doc.rust-lang.org/reference/items/unions.html
+// https://doc.rust-lang.org/reference/items/traits.html
+// https://doc.rust-lang.org/reference/items/implementations.html
+// https://doc.rust-lang.org/reference/items/associated-items.html
+
 // TODO::: rm it
 // @has foo/struct.WithSelf.html '//a/@href' '../foo/struct.WithSelf.html#method.force_failure'
 // @has foo/index.html '//a/@href' '../foo/struct.Foo.html#method.new'
@@ -7,17 +15,123 @@
 
 
 pub struct MyStruct {
-    /// [`field_works`]
+    /// [`ok`]
     ///
-    /// [`field_works`]: MyStruct::field_works
-    pub field_works: u8,
+    /// [`ok`]: MyStruct::ok
+    pub ok: u8,
 
-    /// [`field_broken`]
+    /// [`bad`]
     ///
-    /// [`field_broken`]: Self::field_broken
-    pub field_broken: u8,
+    /// [`bad`]: Self::bad
+    pub bad: u8,
 }
 
+pub enum MyEnum {
+    /// [`ok`]
+    ///
+    /// [`ok`]: MyEnum::ok
+    pub ok,
+
+    /// [`bad`]
+    ///
+    /// [`bad`]: Self::bad
+    pub bad,
+}
+
+union MyUnion {
+    /// [`ok`]
+    ///
+    /// [`ok`]: MyEnum::ok
+    pub ok,
+
+    /// [`bad`]
+    ///
+    /// [`bad`]: Self::bad
+    pub bad: f32,
+}
+
+
+pub trait MyTrait {
+    /// [`OK`]
+    ///
+    /// [`OK`]: MyTrait::OK
+    pub const OK: i32 = 1;
+    /// [`BAD`]
+    ///
+    /// [`BAD`]: Self::BAD
+    pub const BAD: i32 = 1;
+
+    /// [`ok`]
+    ///
+    /// [`ok`]: MyTrait::ok
+    pub fn ok() {}
+    /// [`bad`]
+    ///
+    /// [`bad`]: Self::bad
+    pub fn bad() {}
+}
+
+
+impl MyStruct {
+    /// [`ok`]
+    ///
+    /// [`ok`]: MyStruct::ok
+    pub fn ok() -> Self {
+        unimplemented!()
+    }
+    /// [`bad`]
+    ///
+    /// [`bad`]: Self::bad
+    pub fn bad() -> Self {
+        unimplemented!()
+    }
+}
+
+impl MyTrait for MyStruct {
+    /// [`ok`]
+    ///
+    /// [`ok`]: MyStruct::ok
+    pub fn ok() -> Self {
+        unimplemented!()
+    }
+    /// [`bad`]
+    ///
+    /// [`bad`]: Self::bad
+    pub fn bad() -> Self {
+        unimplemented!()
+    }
+}
+
+trait AssociatedType {
+    ///
+    type Assoc;
+
+    pub fn ok() -> Self;
+    pub fn bad() -> Self;
+
+}
+
+impl AssociatedType for MyStruct {
+    /// [`type`]
+    ///
+    // TODO:
+    /// [`type`]: MyStruct::Assoc
+    type Assoc = u32;
+
+    /// [`ok`]
+    ///
+    /// [`ok`]: MyStruct::ok
+    pub fn ok() -> Self {
+        unimplemented!()
+    }
+
+    /// [`bad`]
+    ///
+    /// [`bad`]: Self::bad
+    pub fn bad() -> Self {
+        unimplemented!()
+    }
+}
 
 ///// Use [`new`] to create a new instance.
 /////
@@ -81,12 +195,4 @@ pub struct MyStruct {
 //        unimplemented!()
 //    }
 //}
-//
-// https://doc.rust-lang.org/reference/items/functions.html
-// https://doc.rust-lang.org/reference/items/structs.html
-// https://doc.rust-lang.org/reference/items/enumerations.html
-// https://doc.rust-lang.org/reference/items/unions.html
-// https://doc.rust-lang.org/reference/items/traits.html
-// https://doc.rust-lang.org/reference/items/implementations.html
-// https://doc.rust-lang.org/reference/items/external-blocks.html
-// https://doc.rust-lang.org/reference/items/associated-items.html
+
