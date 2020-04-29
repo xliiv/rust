@@ -16,10 +16,8 @@
 //TODO: better name for bad, Bad, etc.
 //TODO: do we need ok, Ok, OK variants?
 //TODO: verfify that all <at>has works correctly
-//TODO: use unique names instead of bad for field, method, etc.
 
 pub struct MyStruct {
-    //TODO fix it
     /// [`struct_field_ok`]
     ///
     /// [`struct_field_ok`]: MyStruct::struct_field_ok
@@ -62,7 +60,17 @@ pub union MyUnion {
 }
 
 pub trait MyTrait {
-    //TODO: type Assoc;
+    /// [`Asso_type_ok`]
+    ///
+    /// [`Asso_type_ok`]: MyTrait::Asso_type_ok
+    type Asso_type_ok;
+
+    // @has foo/trait.MyTrait.html '//a/@href' '../foo/trait.MyTrait.html#associatedtype.Asso_type_bad'
+
+    /// [`Asso_type_bad`]
+    ///
+    /// [`Asso_type_bad`]: Self::Asso_type_bad
+    type Asso_type_bad;
 
     /// [`ASSO_CONST_OK`]
     ///
@@ -108,6 +116,20 @@ impl MyStruct {
 }
 
 impl MyTrait for MyStruct {
+    // @has foo/struct.MyStruct.html '//a/@href' '../foo/struct.MyStruct.html#associatedtype.Asso_type_ok'
+
+    /// [`Asso_type_ok`]
+    ///
+    /// [`Asso_type_ok`]: MyTrait::Asso_type_ok
+    type Asso_type_ok = u32;
+
+    // @has foo/struct.MyStruct.html '//a/@href' '../foo/struct.MyStruct.html#associatedtype.Asso_type_bad'
+
+    /// [`Asso_type_bad`]
+    ///
+    /// [`Asso_type_bad`]: Self::Asso_type_bad
+    type Asso_type_bad = u32;
+
     // @has foo/struct.MyStruct.html '//a/@href' '../foo/struct.MyStruct.html#ASSO_CONST_OK.v'
 
     /// [`ASSO_CONST_OK`]
