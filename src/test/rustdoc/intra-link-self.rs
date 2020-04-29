@@ -107,7 +107,7 @@ impl MyStruct {
 }
 
 impl MyTrait for MyStruct {
-    // @has foo/struct.MyStruct.html '//a/@href' '../foo/trait.MyTrait.html#method.trait_method_ok'
+    // @has foo/struct.MyStruct.html '//a/@href' '../foo/struct.MyStruct.html#method.trait_method_ok'
 
     /// [`trait_method_ok`]
     ///
@@ -121,7 +121,7 @@ impl MyTrait for MyStruct {
         unimplemented!()
     }
 
-    // @has foo/struct.MyStruct.html '//a/@href' '../foo/trait.MyTrait.html#method.trait_method_bad'
+    // @has foo/struct.MyStruct.html '//a/@href' '../foo/struct.MyStruct.html#method.trait_method_bad'
 
     /// [`trait_method_bad`]
     ///
