@@ -29,17 +29,17 @@ pub struct MyStruct {
 }
 
 pub enum MyEnum {
-    /// [`ok`]
+    /// [`Ok`]
     ///
-    /// [`ok`]: MyEnum::ok
-    ok,
+    /// [`Ok`]: MyEnum::Ok
+    Ok,
 
-    // @has foo/struct.Foo.html '//a/@href' '../foo/enum.MyEnum.html#bad.v'
+    // @has foo/struct.Foo.html '//a/@href' '../foo/enum.MyEnum.html#Bad.v'
 
-    /// [`bad`]
+    /// [`Bad`]
     ///
-    /// [`bad`]: Self::bad
-    bad,
+    /// [`Bad`]: Self::Bad
+    Bad,
 }
 
 //union MyUnion {
