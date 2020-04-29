@@ -149,7 +149,7 @@ impl MyTrait for MyStruct {
     ///
     //TODO: link is broken here
     /// [`asso_fn_ok`]: MyStruct::asso_fn_ok
-    //TODO: this points to trait, but should link to itself like
+    //TODO: this points to trait, but should link to implementator like
     // asso_fn_ok.v
     // instead of current
     // ../foo/trait.MyTrait.html#method.asso_fn_ok
@@ -163,7 +163,7 @@ impl MyTrait for MyStruct {
     ///
     //TODO: link is broken here
     /// [`asso_fn_bad`]: Self::asso_fn_bad
-    //TODO: this points to trait, but should link to itself like
+    //TODO: this points to trait, but should link to implementator like
     // asso_fn_bad.v
     // instead of current
     // ../foo/trait.MyTrait.html#method.asso_fn_bad
