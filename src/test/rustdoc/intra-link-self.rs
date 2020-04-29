@@ -20,7 +20,7 @@ pub struct MyStruct {
     /// [`ok`]: MyStruct::ok
     pub ok: u8,
 
-    // @has foo/struct.Foo.html '//a/@href' '../foo/struct.MyStruct.html#structfield.bad'
+    // @has foo/struct.MyStruct.html '//a/@href' '../foo/struct.MyStruct.html#structfield.bad'
 
     /// [`bad`]
     ///
@@ -34,7 +34,7 @@ pub enum MyEnum {
     /// [`Ok`]: MyEnum::Ok
     Ok,
 
-    // @has foo/struct.Foo.html '//a/@href' '../foo/enum.MyEnum.html#Bad.v'
+    // @has foo/enum.MyEnum.html '//a/@href' '../foo/enum.MyEnum.html#Bad.v'
 
     /// [`Bad`]
     ///
@@ -42,19 +42,21 @@ pub enum MyEnum {
     Bad,
 }
 
-//union MyUnion {
-//    /// [`ok`]
-//    ///
-//    /// [`ok`]: MyEnum::ok
-//    pub ok,
-//
-//    /// [`bad`]
-//    ///
-//    /// [`bad`]: Self::bad
-//    pub bad: f32,
-//}
-//
-//
+pub union MyUnion {
+    /// [`ok`]
+    ///
+    /// [`ok`]: MyUnion::ok
+    pub ok: f32,
+
+    // @has foo/union.MyUnion.html '//a/@href' '../foo/union.MyUnion.html#structfield.bad'
+
+    /// [`bad`]
+    ///
+    /// [`bad`]: Self::bad
+    pub bad: f32,
+}
+
+
 //pub trait MyTrait {
 //    /// [`OK`]
 //    ///
