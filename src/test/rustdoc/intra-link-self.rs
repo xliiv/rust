@@ -107,6 +107,20 @@ impl MyStruct {
 }
 
 impl MyTrait for MyStruct {
+    // @has foo/struct.MyStruct.html '//a/@href' '../foo/struct.MyStruct.html#TRAIT_CONST_OK.v'
+
+    /// [`TRAIT_CONST_OK`]
+    ///
+    /// [`TRAIT_CONST_OK`]: MyTrait::TRAIT_CONST_OK
+    const TRAIT_CONST_OK: i32 = 10;
+
+    // @has foo/struct.MyStruct.html '//a/@href' '../foo/struct.MyStruct.html#TRAIT_CONST_BAD.v'
+
+    /// [`TRAIT_CONST_BAD`]
+    ///
+    /// [`TRAIT_CONST_BAD`]: Self::TRAIT_CONST_BAD
+    const TRAIT_CONST_BAD: i32 = 10;
+
     // @has foo/struct.MyStruct.html '//a/@href' '../foo/struct.MyStruct.html#method.trait_method_ok'
 
     /// [`trait_method_ok`]
