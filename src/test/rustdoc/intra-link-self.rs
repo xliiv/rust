@@ -9,9 +9,9 @@
 // https://doc.rust-lang.org/reference/items/associated-items.html
 
 // TODO::: rm it
-// @has foo/struct.WithSelf.html '//a/@href' '../foo/struct.WithSelf.html#method.force_failure'
-// @has foo/index.html '//a/@href' '../foo/struct.Foo.html#method.new'
-// @has foo/struct.Foo.html '//a/@href' '../foo/struct.Foo.html#method.new'
+// has foo/struct.WithSelf.html '//a/@href' '../foo/struct.WithSelf.html#method.force_failure'
+// has foo/index.html '//a/@href' '../foo/struct.Foo.html#method.new'
+// has foo/struct.Foo.html '//a/@href' '../foo/struct.Foo.html#method.new'
 
 
 pub struct MyStruct {
@@ -20,118 +20,140 @@ pub struct MyStruct {
     /// [`ok`]: MyStruct::ok
     pub ok: u8,
 
+    // @has foo/struct.Foo.html '//a/@href' '../foo/struct.MyStruct.html#structfield.bad'
+
     /// [`bad`]
     ///
     /// [`bad`]: Self::bad
     pub bad: u8,
 }
 
-pub enum MyEnum {
-    /// [`ok`]
-    ///
-    /// [`ok`]: MyEnum::ok
-    pub ok,
+//pub enum MyEnum {
+//    /// [`ok`]
+//    ///
+//    /// [`ok`]: MyEnum::ok
+//    pub ok,
+//
+//    /// [`bad`]
+//    ///
+//    /// [`bad`]: Self::bad
+//    pub bad,
+//}
+//
+//union MyUnion {
+//    /// [`ok`]
+//    ///
+//    /// [`ok`]: MyEnum::ok
+//    pub ok,
+//
+//    /// [`bad`]
+//    ///
+//    /// [`bad`]: Self::bad
+//    pub bad: f32,
+//}
+//
+//
+//pub trait MyTrait {
+//    /// [`OK`]
+//    ///
+//    /// [`OK`]: MyTrait::OK
+//    pub const OK: i32 = 1;
+//    /// [`BAD`]
+//    ///
+//    /// [`BAD`]: Self::BAD
+//    pub const BAD: i32 = 1;
+//
+//    /// [`ok`]
+//    ///
+//    /// [`ok`]: MyTrait::ok
+//    pub fn ok() {}
+//    /// [`bad`]
+//    ///
+//    /// [`bad`]: Self::bad
+//    pub fn bad() {}
+//}
+//
+//
+//impl MyStruct {
+//    /// [`ok`]
+//    ///
+//    /// [`ok`]: MyStruct::ok
+//    pub fn ok() -> Self {
+//        unimplemented!()
+//    }
+//    /// [`bad`]
+//    ///
+//    /// [`bad`]: Self::bad
+//    pub fn bad() -> Self {
+//        unimplemented!()
+//    }
+//}
+//
+//impl MyTrait for MyStruct {
+//    /// [`ok`]
+//    ///
+//    /// [`ok`]: MyStruct::ok
+//    pub fn ok() -> Self {
+//        unimplemented!()
+//    }
+//    /// [`bad`]
+//    ///
+//    /// [`bad`]: Self::bad
+//    pub fn bad() -> Self {
+//        unimplemented!()
+//    }
+//}
+//
+//trait AssociatedType {
+//    ///
+//    type Assoc;
+//    const ID: i32;
+//
+//    pub fn ok() -> Self;
+//    pub fn bad() -> Self;
+//
+//}
+////TODO:
+//impl AssociatedType for MyStruct {
+//    /// [`type`]
+//    ///
+//    // TODO:
+//    /// [`type`]: MyStruct::Assoc
+//    type Assoc = u32;
+//
+//    /// [`const`]
+//    ///
+//    // TODO:
+//    /// [`const`]: MyStruct::Assoc
+//    const ID: i32 = 5;
+//
+//    /// [`ok`]
+//    ///
+//    /// [`ok`]: MyStruct::ok
+//    pub fn ok() -> Self {
+//        unimplemented!()
+//    }
+//
+//    /// [`bad`]
+//    ///
+//    /// [`bad`]: Self::bad
+//    pub fn bad() -> Self {
+//        unimplemented!()
+//    }
+//}
 
-    /// [`bad`]
-    ///
-    /// [`bad`]: Self::bad
-    pub bad,
-}
-
-union MyUnion {
-    /// [`ok`]
-    ///
-    /// [`ok`]: MyEnum::ok
-    pub ok,
-
-    /// [`bad`]
-    ///
-    /// [`bad`]: Self::bad
-    pub bad: f32,
-}
 
 
-pub trait MyTrait {
-    /// [`OK`]
-    ///
-    /// [`OK`]: MyTrait::OK
-    pub const OK: i32 = 1;
-    /// [`BAD`]
-    ///
-    /// [`BAD`]: Self::BAD
-    pub const BAD: i32 = 1;
-
-    /// [`ok`]
-    ///
-    /// [`ok`]: MyTrait::ok
-    pub fn ok() {}
-    /// [`bad`]
-    ///
-    /// [`bad`]: Self::bad
-    pub fn bad() {}
-}
 
 
-impl MyStruct {
-    /// [`ok`]
-    ///
-    /// [`ok`]: MyStruct::ok
-    pub fn ok() -> Self {
-        unimplemented!()
-    }
-    /// [`bad`]
-    ///
-    /// [`bad`]: Self::bad
-    pub fn bad() -> Self {
-        unimplemented!()
-    }
-}
 
-impl MyTrait for MyStruct {
-    /// [`ok`]
-    ///
-    /// [`ok`]: MyStruct::ok
-    pub fn ok() -> Self {
-        unimplemented!()
-    }
-    /// [`bad`]
-    ///
-    /// [`bad`]: Self::bad
-    pub fn bad() -> Self {
-        unimplemented!()
-    }
-}
 
-trait AssociatedType {
-    ///
-    type Assoc;
 
-    pub fn ok() -> Self;
-    pub fn bad() -> Self;
 
-}
 
-impl AssociatedType for MyStruct {
-    /// [`type`]
-    ///
-    // TODO:
-    /// [`type`]: MyStruct::Assoc
-    type Assoc = u32;
 
-    /// [`ok`]
-    ///
-    /// [`ok`]: MyStruct::ok
-    pub fn ok() -> Self {
-        unimplemented!()
-    }
 
-    /// [`bad`]
-    ///
-    /// [`bad`]: Self::bad
-    pub fn bad() -> Self {
-        unimplemented!()
-    }
-}
+// OLD STUFF
 
 ///// Use [`new`] to create a new instance.
 /////
@@ -144,8 +166,8 @@ impl AssociatedType for MyStruct {
 //    }
 //}
 //
-//// @has foo/index.html '//a/@href' '../foo/struct.Bar.html#method.new2'
-//// @has foo/struct.Bar.html '//a/@href' '../foo/struct.Bar.html#method.new2'
+//// has foo/index.html '//a/@href' '../foo/struct.Bar.html#method.new2'
+//// has foo/struct.Bar.html '//a/@href' '../foo/struct.Bar.html#method.new2'
 //
 ///// Use [`new2`] to create a new instance.
 /////
@@ -165,7 +187,7 @@ impl AssociatedType for MyStruct {
 //// /// [`u8_field`]: Self::u8_field
 //pub struct WithSelf {
 //
-//// @has foo/struct.WithSelf.html '//a/@href' '../foo/struct.WithSelf.html#structfield.u8_field'
+//// has foo/struct.WithSelf.html '//a/@href' '../foo/struct.WithSelf.html#structfield.u8_field'
 //
 //    /// [`u8_field`]
 //    ///
@@ -177,7 +199,7 @@ impl AssociatedType for MyStruct {
 //
 //impl WithSelf {
 //
-//// @has foo/struct.WithSelf.html '//a/@href' '../foo/struct.WithSelf.html#method.basic'
+//// has foo/struct.WithSelf.html '//a/@href' '../foo/struct.WithSelf.html#method.basic'
 //
 //    /// [`basic`]
 //    ///
@@ -186,7 +208,7 @@ impl AssociatedType for MyStruct {
 //        unimplemented!()
 //    }
 //
-//// @has foo/struct.WithSelf.html '//a/@href' '../foo/struct.WithSelf.html#method.name_self'
+//// has foo/struct.WithSelf.html '//a/@href' '../foo/struct.WithSelf.html#method.name_self'
 //
 //    /// [`name_self`]
 //    ///
