@@ -15,7 +15,6 @@
 
 //TODO: better name for bad, Bad, etc.
 //TODO: do we need ok, Ok, OK variants?
-//TODO: verfify that all <at>has works correctly
 
 pub struct MyStruct {
     /// [`struct_field_ok`]
