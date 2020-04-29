@@ -151,53 +151,6 @@ impl MyTrait for MyStruct {
     }
 }
 
-trait AssociatedType {
-    ///
-    type Assoc;
-    const ID: i32;
-
-    pub fn ok() -> Self;
-    pub fn bad(self) -> Self;
-
-}
-//TODO:
-impl AssociatedType for MyStruct {
-    /// [`type`]
-    ///
-    // TODO:
-    /// [`type`]: MyStruct::Assoc
-    type Assoc = u32;
-
-    /// [`const`]
-    ///
-    // TODO:
-    /// [`const`]: MyStruct::Assoc
-    const ID: i32 = 5;
-
-    /// [`ok`]
-    ///
-    /// [`ok`]: MyStruct::ok
-    pub fn ok() -> Self {
-        unimplemented!()
-    }
-
-    /// [`bad`]
-    ///
-    /// [`bad`]: Self::bad
-    pub fn bad() -> Self {
-        unimplemented!()
-    }
-}
-
-
-
-
-
-
-
-
-
-
 
 
 // OLD STUFF
