@@ -62,30 +62,31 @@ pub union MyUnion {
 }
 
 pub trait MyTrait {
-    //TODO:
-    /// [`TRAIT_CONST_OK`]
+    //TODO: type Assoc;
+
+    /// [`ASSO_CONST_OK`]
     ///
-    /// [`TRAIT_CONST_OK`]: MyTrait::TRAIT_CONST_OK
-    const TRAIT_CONST_OK: i32 = 1;
+    /// [`ASSO_CONST_OK`]: MyTrait::ASSO_CONST_OK
+    const ASSO_CONST_OK: i32 = 1;
 
-    // @has foo/trait.MyTrait.html '//a/@href' '../foo/trait.MyTrait.html#associatedconstant.TRAIT_CONST_BAD'
+    // @has foo/trait.MyTrait.html '//a/@href' '../foo/trait.MyTrait.html#associatedconstant.ASSO_CONST_BAD'
 
-    /// [`TRAIT_CONST_BAD`]
+    /// [`ASSO_CONST_BAD`]
     ///
-    /// [`TRAIT_CONST_BAD`]: Self::TRAIT_CONST_BAD
-    const TRAIT_CONST_BAD: i32 = 1;
+    /// [`ASSO_CONST_BAD`]: Self::ASSO_CONST_BAD
+    const ASSO_CONST_BAD: i32 = 1;
 
-    /// [`trait_method_ok`]
+    /// [`asso_fn_ok`]
     ///
-    /// [`trait_method_ok`]: MyTrait::trait_method_ok
-    fn trait_method_ok() {}
+    /// [`asso_fn_ok`]: MyTrait::asso_fn_ok
+    fn asso_fn_ok() {}
 
-    // @has foo/trait.MyTrait.html '//a/@href' '../foo/trait.MyTrait.html#method.trait_method_bad'
+    // @has foo/trait.MyTrait.html '//a/@href' '../foo/trait.MyTrait.html#method.asso_fn_bad'
 
-    /// [`trait_method_bad`]
+    /// [`asso_fn_bad`]
     ///
-    /// [`trait_method_bad`]: Self::trait_method_bad
-    fn trait_method_bad() {}
+    /// [`asso_fn_bad`]: Self::asso_fn_bad
+    fn asso_fn_bad() {}
 }
 
 impl MyStruct {
@@ -107,86 +108,86 @@ impl MyStruct {
 }
 
 impl MyTrait for MyStruct {
-    // @has foo/struct.MyStruct.html '//a/@href' '../foo/struct.MyStruct.html#TRAIT_CONST_OK.v'
+    // @has foo/struct.MyStruct.html '//a/@href' '../foo/struct.MyStruct.html#ASSO_CONST_OK.v'
 
-    /// [`TRAIT_CONST_OK`]
+    /// [`ASSO_CONST_OK`]
     ///
-    /// [`TRAIT_CONST_OK`]: MyTrait::TRAIT_CONST_OK
-    const TRAIT_CONST_OK: i32 = 10;
+    /// [`ASSO_CONST_OK`]: MyTrait::ASSO_CONST_OK
+    const ASSO_CONST_OK: i32 = 10;
 
-    // @has foo/struct.MyStruct.html '//a/@href' '../foo/struct.MyStruct.html#TRAIT_CONST_BAD.v'
+    // @has foo/struct.MyStruct.html '//a/@href' '../foo/struct.MyStruct.html#ASSO_CONST_BAD.v'
 
-    /// [`TRAIT_CONST_BAD`]
+    /// [`ASSO_CONST_BAD`]
     ///
-    /// [`TRAIT_CONST_BAD`]: Self::TRAIT_CONST_BAD
-    const TRAIT_CONST_BAD: i32 = 10;
+    /// [`ASSO_CONST_BAD`]: Self::ASSO_CONST_BAD
+    const ASSO_CONST_BAD: i32 = 10;
 
-    // @has foo/struct.MyStruct.html '//a/@href' '../foo/struct.MyStruct.html#method.trait_method_ok'
+    // @has foo/struct.MyStruct.html '//a/@href' '../foo/struct.MyStruct.html#method.asso_fn_ok'
 
-    /// [`trait_method_ok`]
+    /// [`asso_fn_ok`]
     ///
     //TODO: link is broken here
-    /// [`trait_method_ok`]: MyStruct::trait_method_ok
+    /// [`asso_fn_ok`]: MyStruct::asso_fn_ok
     //TODO: this points to trait, but should link to itself like
-    // trait_method_ok.v
+    // asso_fn_ok.v
     // instead of current
-    // ../foo/trait.MyTrait.html#method.trait_method_ok
-    fn trait_method_ok() {
+    // ../foo/trait.MyTrait.html#method.asso_fn_ok
+    fn asso_fn_ok() {
         unimplemented!()
     }
 
-    // @has foo/struct.MyStruct.html '//a/@href' '../foo/struct.MyStruct.html#method.trait_method_bad'
+    // @has foo/struct.MyStruct.html '//a/@href' '../foo/struct.MyStruct.html#method.asso_fn_bad'
 
-    /// [`trait_method_bad`]
+    /// [`asso_fn_bad`]
     ///
     //TODO: link is broken here
-    /// [`trait_method_bad`]: Self::trait_method_bad
+    /// [`asso_fn_bad`]: Self::asso_fn_bad
     //TODO: this points to trait, but should link to itself like
-    // trait_method_bad.v
+    // asso_fn_bad.v
     // instead of current
-    // ../foo/trait.MyTrait.html#method.trait_method_bad
-    fn trait_method_bad() {
+    // ../foo/trait.MyTrait.html#method.asso_fn_bad
+    fn asso_fn_bad() {
         unimplemented!()
     }
 }
 
-//trait AssociatedType {
-//    ///
-//    type Assoc;
-//    const ID: i32;
-//
-//    pub fn ok() -> Self;
-//    pub fn bad() -> Self;
-//
-//}
-////TODO:
-//impl AssociatedType for MyStruct {
-//    /// [`type`]
-//    ///
-//    // TODO:
-//    /// [`type`]: MyStruct::Assoc
-//    type Assoc = u32;
-//
-//    /// [`const`]
-//    ///
-//    // TODO:
-//    /// [`const`]: MyStruct::Assoc
-//    const ID: i32 = 5;
-//
-//    /// [`ok`]
-//    ///
-//    /// [`ok`]: MyStruct::ok
-//    pub fn ok() -> Self {
-//        unimplemented!()
-//    }
-//
-//    /// [`bad`]
-//    ///
-//    /// [`bad`]: Self::bad
-//    pub fn bad() -> Self {
-//        unimplemented!()
-//    }
-//}
+trait AssociatedType {
+    ///
+    type Assoc;
+    const ID: i32;
+
+    pub fn ok() -> Self;
+    pub fn bad(self) -> Self;
+
+}
+//TODO:
+impl AssociatedType for MyStruct {
+    /// [`type`]
+    ///
+    // TODO:
+    /// [`type`]: MyStruct::Assoc
+    type Assoc = u32;
+
+    /// [`const`]
+    ///
+    // TODO:
+    /// [`const`]: MyStruct::Assoc
+    const ID: i32 = 5;
+
+    /// [`ok`]
+    ///
+    /// [`ok`]: MyStruct::ok
+    pub fn ok() -> Self {
+        unimplemented!()
+    }
+
+    /// [`bad`]
+    ///
+    /// [`bad`]: Self::bad
+    pub fn bad() -> Self {
+        unimplemented!()
+    }
+}
 
 
 
