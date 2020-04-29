@@ -28,18 +28,20 @@ pub struct MyStruct {
     pub bad: u8,
 }
 
-//pub enum MyEnum {
-//    /// [`ok`]
-//    ///
-//    /// [`ok`]: MyEnum::ok
-//    pub ok,
-//
-//    /// [`bad`]
-//    ///
-//    /// [`bad`]: Self::bad
-//    pub bad,
-//}
-//
+pub enum MyEnum {
+    /// [`ok`]
+    ///
+    /// [`ok`]: MyEnum::ok
+    ok,
+
+    // @has foo/struct.Foo.html '//a/@href' '../foo/enum.MyEnum.html#bad.v'
+
+    /// [`bad`]
+    ///
+    /// [`bad`]: Self::bad
+    bad,
+}
+
 //union MyUnion {
 //    /// [`ok`]
 //    ///
