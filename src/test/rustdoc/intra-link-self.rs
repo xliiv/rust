@@ -15,123 +15,123 @@
 
 //TODO: better name for bad, Bad, etc.
 //TODO: do we need ok, Ok, OK variants?
-//TODO: verfify that all @has works correctly
+//TODO: verfify that all <at>has works correctly
 //TODO: use unique names instead of bad for field, method, etc.
 
 pub struct MyStruct {
     //TODO fix it
-    /// [`ok`]
+    /// [`struct_field_ok`]
     ///
-    /// [`ok`]: MyStruct::ok
-    pub ok: u8,
+    /// [`struct_field_ok`]: MyStruct::struct_field_ok
+    pub struct_field_ok: u8,
 
-    // @has foo/struct.MyStruct.html '//a/@href' '../foo/struct.MyStruct.html#structfield.bad'
+    // @has foo/struct.MyStruct.html '//a/@href' '../foo/struct.MyStruct.html#structfield.struct_field_bad'
 
-    /// [`bad`]
+    /// [`struct_field_bad`]
     ///
-    /// [`bad`]: Self::bad
-    pub bad: u8,
+    /// [`struct_field_bad`]: Self::struct_field_bad
+    pub struct_field_bad: u8,
 }
 
 pub enum MyEnum {
-    /// [`Ok`]
+    /// [`EnumVariantOk`]
     ///
-    /// [`Ok`]: MyEnum::Ok
-    Ok,
+    /// [`EnumVariantOk`]: MyEnum::EnumVariantOk
+    EnumVariantOk,
 
-    // @has foo/enum.MyEnum.html '//a/@href' '../foo/enum.MyEnum.html#Bad.v'
+    // @has foo/enum.MyEnum.html '//a/@href' '../foo/enum.MyEnum.html#EnumVariantBad.v'
 
-    /// [`Bad`]
+    /// [`EnumVariantBad`]
     ///
-    /// [`Bad`]: Self::Bad
-    Bad,
+    /// [`EnumVariantBad`]: Self::EnumVariantBad
+    EnumVariantBad,
 }
 
 pub union MyUnion {
-    /// [`ok`]
+    /// [`union_field_ok`]
     ///
-    /// [`ok`]: MyUnion::ok
-    pub ok: f32,
+    /// [`union_field_ok`]: MyUnion::union_field_ok
+    pub union_field_ok: f32,
 
-    // @has foo/union.MyUnion.html '//a/@href' '../foo/union.MyUnion.html#structfield.bad'
+    // @has foo/union.MyUnion.html '//a/@href' '../foo/union.MyUnion.html#structfield.union_field_bad'
 
-    /// [`bad`]
+    /// [`union_field_bad`]
     ///
-    /// [`bad`]: Self::bad
-    pub bad: f32,
+    /// [`union_field_bad`]: Self::union_field_bad
+    pub union_field_bad: f32,
 }
 
 pub trait MyTrait {
     //TODO:
-    /// [`OK`]
+    /// [`TRAIT_CONST_OK`]
     ///
-    /// [`OK`]: MyTrait::OK
-    const OK: i32 = 1;
+    /// [`TRAIT_CONST_OK`]: MyTrait::TRAIT_CONST_OK
+    const TRAIT_CONST_OK: i32 = 1;
 
-    // @has foo/trait.MyTrait.html '//a/@href' '../foo/trait.MyTrait.html#associatedconstant.BAD'
+    // @has foo/trait.MyTrait.html '//a/@href' '../foo/trait.MyTrait.html#associatedconstant.TRAIT_CONST_BAD'
 
-    /// [`BAD`]
+    /// [`TRAIT_CONST_BAD`]
     ///
-    /// [`BAD`]: Self::BAD
-    const BAD: i32 = 1;
+    /// [`TRAIT_CONST_BAD`]: Self::TRAIT_CONST_BAD
+    const TRAIT_CONST_BAD: i32 = 1;
 
-    /// [`trait_ok`]
+    /// [`trait_method_ok`]
     ///
-    /// [`trait_ok`]: MyTrait::trait_ok
-    fn trait_ok() {}
+    /// [`trait_method_ok`]: MyTrait::trait_method_ok
+    fn trait_method_ok() {}
 
-    // @has foo/trait.MyTrait.html '//a/@href' '../foo/trait.MyTrait.html#method.trait_bad'
+    // @has foo/trait.MyTrait.html '//a/@href' '../foo/trait.MyTrait.html#method.trait_method_bad'
 
-    /// [`trait_bad`]
+    /// [`trait_method_bad`]
     ///
-    /// [`trait_bad`]: Self::trait_bad
-    fn trait_bad() {}
+    /// [`trait_method_bad`]: Self::trait_method_bad
+    fn trait_method_bad() {}
 }
 
 impl MyStruct {
-    /// [`ok`]
+    /// [`impl_ok`]
     ///
-    /// [`ok`]: MyStruct::ok
-    pub fn ok() -> Self {
+    /// [`impl_ok`]: MyStruct::impl_ok
+    pub fn impl_ok() -> Self {
         unimplemented!()
     }
 
-    // @has foo/struct.MyStruct.html '//a/@href' '../foo/struct.MyStruct.html#method.bad'
+    // @has foo/struct.MyStruct.html '//a/@href' '../foo/struct.MyStruct.html#method.impl_bad'
 
-    /// [`bad`]
+    /// [`impl_bad`]
     ///
-    /// [`bad`]: Self::bad
-    pub fn bad() -> Self {
+    /// [`impl_bad`]: Self::impl_bad
+    pub fn impl_bad() -> Self {
         unimplemented!()
     }
 }
 
 impl MyTrait for MyStruct {
-    // @has foo/struct.MyStruct.html '//a/@href' '../foo/trait.MyTrait.html#method.trait_ok'
+    // @has foo/struct.MyStruct.html '//a/@href' '../foo/trait.MyTrait.html#method.trait_method_ok'
 
-    /// [`trait_ok`]
+    /// [`trait_method_ok`]
     ///
     //TODO: link is broken here
-    /// [`trait_ok`]: MyStruct::trait_ok
+    /// [`trait_method_ok`]: MyStruct::trait_method_ok
     //TODO: this points to trait, but should link to itself like
-    // trait_ok.v
+    // trait_method_ok.v
     // instead of current
-    // ../foo/trait.MyTrait.html#method.trait_ok
-    fn trait_ok() {
+    // ../foo/trait.MyTrait.html#method.trait_method_ok
+    fn trait_method_ok() {
         unimplemented!()
     }
 
-    // @has foo/struct.MyStruct.html '//a/@href' '../foo/trait.MyTrait.html#method.trait_bad'
+    // @has foo/struct.MyStruct.html '//a/@href' '../foo/trait.MyTrait.html#method.trait_method_bad'
 
-    /// [`trait_bad`]
+    /// [`trait_method_bad`]
     ///
     //TODO: link is broken here
-    /// [`trait_bad`]: Self::trait_bad
+    /// [`trait_method_bad`]: Self::trait_method_bad
     //TODO: this points to trait, but should link to itself like
-    // trait_bad.v
+    // trait_method_bad.v
     // instead of current
-    // ../foo/trait.MyTrait.html#method.trait_bad
-    fn trait_bad() {
+    // ../foo/trait.MyTrait.html#method.trait_method_bad
+    fn trait_method_bad() {
         unimplemented!()
     }
 }
