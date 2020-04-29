@@ -15,8 +15,11 @@
 
 //TODO: better name for bad, Bad, etc.
 //TODO: do we need ok, Ok, OK variants?
+//TODO: verfify that all @has works correctly
+//TODO: use unique names instead of bad for field, method, etc.
 
 pub struct MyStruct {
+    //TODO fix it
     /// [`ok`]
     ///
     /// [`ok`]: MyStruct::ok
@@ -58,8 +61,8 @@ pub union MyUnion {
     pub bad: f32,
 }
 
-
 pub trait MyTrait {
+    //TODO:
     /// [`OK`]
     ///
     /// [`OK`]: MyTrait::OK
@@ -72,19 +75,18 @@ pub trait MyTrait {
     /// [`BAD`]: Self::BAD
     const BAD: i32 = 1;
 
-    /// [`ok`]
+    /// [`trait_ok`]
     ///
-    /// [`ok`]: MyTrait::ok
-    fn ok() {}
+    /// [`trait_ok`]: MyTrait::trait_ok
+    fn trait_ok() {}
 
-    // @has foo/trait.MyTrait.html '//a/@href' '../foo/trait.MyTrait.html#method.bad'
+    // @has foo/trait.MyTrait.html '//a/@href' '../foo/trait.MyTrait.html#method.trait_bad'
 
-    /// [`bad`]
+    /// [`trait_bad`]
     ///
-    /// [`bad`]: Self::bad
-    fn bad() {}
+    /// [`trait_bad`]: Self::trait_bad
+    fn trait_bad() {}
 }
-
 
 impl MyStruct {
     /// [`ok`]
@@ -104,21 +106,36 @@ impl MyStruct {
     }
 }
 
-//impl MyTrait for MyStruct {
-//    /// [`ok`]
-//    ///
-//    /// [`ok`]: MyStruct::ok
-//    pub fn ok() -> Self {
-//        unimplemented!()
-//    }
-//    /// [`bad`]
-//    ///
-//    /// [`bad`]: Self::bad
-//    pub fn bad() -> Self {
-//        unimplemented!()
-//    }
-//}
-//
+impl MyTrait for MyStruct {
+    // @has foo/struct.MyStruct.html '//a/@href' '../foo/trait.MyTrait.html#method.trait_ok'
+
+    /// [`trait_ok`]
+    ///
+    //TODO: link is broken here
+    /// [`trait_ok`]: MyStruct::trait_ok
+    //TODO: this points to trait, but should link to itself like
+    // trait_ok.v
+    // instead of current
+    // ../foo/trait.MyTrait.html#method.trait_ok
+    fn trait_ok() {
+        unimplemented!()
+    }
+
+    // @has foo/struct.MyStruct.html '//a/@href' '../foo/trait.MyTrait.html#method.trait_bad'
+
+    /// [`trait_bad`]
+    ///
+    //TODO: link is broken here
+    /// [`trait_bad`]: Self::trait_bad
+    //TODO: this points to trait, but should link to itself like
+    // trait_bad.v
+    // instead of current
+    // ../foo/trait.MyTrait.html#method.trait_bad
+    fn trait_bad() {
+        unimplemented!()
+    }
+}
+
 //trait AssociatedType {
 //    ///
 //    type Assoc;
