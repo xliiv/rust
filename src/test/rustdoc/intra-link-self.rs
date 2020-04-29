@@ -13,6 +13,8 @@
 // has foo/index.html '//a/@href' '../foo/struct.Foo.html#method.new'
 // has foo/struct.Foo.html '//a/@href' '../foo/struct.Foo.html#method.new'
 
+//TODO: better name for bad, Bad, etc.
+//TODO: do we need ok, Ok, OK variants?
 
 pub struct MyStruct {
     /// [`ok`]
@@ -57,27 +59,33 @@ pub union MyUnion {
 }
 
 
-//pub trait MyTrait {
-//    /// [`OK`]
-//    ///
-//    /// [`OK`]: MyTrait::OK
-//    pub const OK: i32 = 1;
-//    /// [`BAD`]
-//    ///
-//    /// [`BAD`]: Self::BAD
-//    pub const BAD: i32 = 1;
-//
-//    /// [`ok`]
-//    ///
-//    /// [`ok`]: MyTrait::ok
-//    pub fn ok() {}
-//    /// [`bad`]
-//    ///
-//    /// [`bad`]: Self::bad
-//    pub fn bad() {}
-//}
-//
-//
+pub trait MyTrait {
+    /// [`OK`]
+    ///
+    /// [`OK`]: MyTrait::OK
+    const OK: i32 = 1;
+
+    // @has foo/trait.MyTrait.html '//a/@href' '../foo/trait.MyTrait.html#associatedconstant.BAD'
+
+    /// [`BAD`]
+    ///
+    /// [`BAD`]: Self::BAD
+    const BAD: i32 = 1;
+
+    /// [`ok`]
+    ///
+    /// [`ok`]: MyTrait::ok
+    fn ok() {}
+
+    // @has foo/trait.MyTrait.html '//a/@href' '../foo/trait.MyTrait.html#method.bad'
+
+    /// [`bad`]
+    ///
+    /// [`bad`]: Self::bad
+    fn bad() {}
+}
+
+
 //impl MyStruct {
 //    /// [`ok`]
 //    ///
