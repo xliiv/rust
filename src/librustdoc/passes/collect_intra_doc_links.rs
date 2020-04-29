@@ -497,13 +497,13 @@ impl<'a, 'tcx> DocFolder for LinkCollector<'a, 'tcx> {
                 //TODO::: clean it
                 //dbg!(&path_str);
                 //dbg!(&item.attrs.impl_name);
-                let no_self = if let (true, Some(name)) = (path_str.starts_with("Self::"), item.attrs.impl_name.as_ref()) {
-                    path_str.replace("Self::", &format!("{}::", name.as_str()))//.as_str()
-                } else {
-                    //TODO: use &str if possible
-                    path_str.to_string()
-                };
-                path_str = no_self.as_str();
+                //let no_self = if let (true, Some(name)) = (path_str.starts_with("Self::"), item.attrs.impl_name.as_ref()) {
+                //    path_str.replace("Self::", &format!("{}::", name.as_str()))//.as_str()
+                //} else {
+                //    //TODO: use &str if possible
+                //    path_str.to_string()
+                //};
+                //path_str = no_self.as_str();
                 //dbg!(&path_str);
 
                 match kind {

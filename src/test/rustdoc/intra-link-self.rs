@@ -86,21 +86,24 @@ pub trait MyTrait {
 }
 
 
-//impl MyStruct {
-//    /// [`ok`]
-//    ///
-//    /// [`ok`]: MyStruct::ok
-//    pub fn ok() -> Self {
-//        unimplemented!()
-//    }
-//    /// [`bad`]
-//    ///
-//    /// [`bad`]: Self::bad
-//    pub fn bad() -> Self {
-//        unimplemented!()
-//    }
-//}
-//
+impl MyStruct {
+    /// [`ok`]
+    ///
+    /// [`ok`]: MyStruct::ok
+    pub fn ok() -> Self {
+        unimplemented!()
+    }
+
+    // @has foo/struct.MyStruct.html '//a/@href' '../foo/struct.MyStruct.html#method.bad'
+
+    /// [`bad`]
+    ///
+    /// [`bad`]: Self::bad
+    pub fn bad() -> Self {
+        unimplemented!()
+    }
+}
+
 //impl MyTrait for MyStruct {
 //    /// [`ok`]
 //    ///
