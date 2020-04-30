@@ -419,8 +419,6 @@ pub struct Attributes {
     pub links: Vec<(String, Option<DefId>, Option<String>)>,
     pub inner_docs: bool,
     /// Contains name used in `impl` block
-    // TODO::: str?
-    pub impl_name: Option<String>,
 }
 
 impl Attributes {
@@ -580,7 +578,6 @@ impl Attributes {
             span: sp,
             links: vec![],
             inner_docs,
-            impl_name: None,
         }
     }
 

@@ -131,12 +131,6 @@ impl<'a, 'tcx> LinkCollector<'a, 'tcx> {
         parent_id: Option<hir::HirId>,
         extra_fragment: &Option<String>,
     ) -> Result<(Res, Option<String>), ErrorKind> {
-        //dbg!(&path_str);
-        //dbg!(&ns);
-        //dbg!(&current_item);
-        //dbg!(&parent_id);
-        //dbg!(&extra_fragment);
-
         let cx = self.cx;
 
         // In case we're in a module, try to resolve the relative path.
@@ -195,14 +189,10 @@ impl<'a, 'tcx> LinkCollector<'a, 'tcx> {
             let mut split = path_str.rsplitn(2, "::");
             let item_name =
                 split.next().map(|f| Symbol::intern(f)).ok_or(ErrorKind::ResolutionFailure)?;
-            //dbg!(&item_name);
-            //dbg!(&split);
             let path = split
                 .next()
                 .map(|f| {
-                    //dbg!(&f);
                     if f == "self" || f == "Self" {
-                        //dbg!(&current_item);
                         if let Some(name) = current_item.as_ref() {
                             return name.clone();
                         }
@@ -403,7 +393,6 @@ impl<'a, 'tcx> DocFolder for LinkCollector<'a, 'tcx> {
         look_for_tests(&cx, &dox, &item, true);
 
         for (ori_link, link_range) in markdown_links(&dox) {
-            //dbg!(&ori_link);
             // Bail early for real links.
             if ori_link.contains('/') {
                 continue;
@@ -494,21 +483,7 @@ impl<'a, 'tcx> DocFolder for LinkCollector<'a, 'tcx> {
                     if item.is_mod() && item.attrs.inner_docs { None } else { parent_node };
 
 
-                ////TODO::: rm it with impl_name?
-                //dbg!(&path_str);
-                //dbg!(&item.attrs.impl_name);
-                //let no_self = if let (true, Some(name)) = (path_str.starts_with("Self::"), item.attrs.impl_name.as_ref()) {
-                //    path_str.replace("Self::", &format!("{}::", name.as_str()))//.as_str()
-                //} else {
-                //    //TODO: use &str if possible
-                //    path_str.to_string()
-                //};
-                //path_str = no_self.as_str();
-                //dbg!(&path_str);
-
                 //TODO::: clean it
-                dbg!(&item.parent_name);
-                dbg!(&path_str);
                 let no_self = if let (true, Some(name)) = (path_str.starts_with("Self::"), item.parent_name.as_ref()) {
                     path_str.replace("Self::", &format!("{}::", name.as_str()))//.as_str()
                 } else {
@@ -516,7 +491,6 @@ impl<'a, 'tcx> DocFolder for LinkCollector<'a, 'tcx> {
                     path_str.to_string()
                 };
                 path_str = no_self.as_str();
-                dbg!(&path_str);
 
                 match kind {
                     Some(ns @ ValueNS) => {

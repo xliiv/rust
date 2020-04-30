@@ -25,7 +25,6 @@ pub trait DocFolder: Sized {
             StrippedItem(..) => unreachable!(),
             ModuleItem(i) => ModuleItem(self.fold_mod(i)),
             StructItem(mut i) => {
-                //dbg!(&i);
                 let num_fields = i.fields.len();
                 i.fields = i.fields.into_iter().filter_map(|mut x| {
                     x.parent_name = item.clone();
@@ -93,8 +92,6 @@ pub trait DocFolder: Sized {
 
     /// don't override!
     fn fold_item_recur(&mut self, item: Item) -> Option<Item> {
-        //dbg!(&item.name);
-        dbg!(&item);
         let Item { attrs, name, source, visibility, def_id, inner, stability, deprecation, parent_name } = item;
         let inner = match inner {
             StrippedItem(box i) => StrippedItem(box self.fold_inner_recur(i, &name)),
