@@ -59,17 +59,17 @@ pub union MyUnion {
 }
 
 pub trait MyTrait {
-    /// [`Asso_type_ok`]
+    /// [`AssoTypeOk`]
     ///
-    /// [`Asso_type_ok`]: MyTrait::Asso_type_ok
-    type Asso_type_ok;
+    /// [`AssoTypeOk`]: MyTrait::AssoTypeOk
+    type AssoTypeOk;
 
-    // @has foo/trait.MyTrait.html '//a/@href' '../foo/trait.MyTrait.html#associatedtype.Asso_type_bad'
+    // @has foo/trait.MyTrait.html '//a/@href' '../foo/trait.MyTrait.html#associatedtype.AssoTypeBad'
 
-    /// [`Asso_type_bad`]
+    /// [`AssoTypeBad`]
     ///
-    /// [`Asso_type_bad`]: Self::Asso_type_bad
-    type Asso_type_bad;
+    /// [`AssoTypeBad`]: Self::AssoTypeBad
+    type AssoTypeBad;
 
     /// [`ASSO_CONST_OK`]
     ///
@@ -115,19 +115,19 @@ impl MyStruct {
 }
 
 impl MyTrait for MyStruct {
-    // @has foo/struct.MyStruct.html '//a/@href' '../foo/struct.MyStruct.html#associatedtype.Asso_type_ok'
+    // @has foo/struct.MyStruct.html '//a/@href' '../foo/struct.MyStruct.html#associatedtype.AssoTypeOk'
 
-    /// [`Asso_type_ok`]
+    /// [`AssoTypeOk`]
     ///
-    /// [`Asso_type_ok`]: MyTrait::Asso_type_ok
-    type Asso_type_ok = u32;
+    /// [`AssoTypeOk`]: MyTrait::AssoTypeOk
+    type AssoTypeOk = u32;
 
-    // @has foo/struct.MyStruct.html '//a/@href' '../foo/struct.MyStruct.html#associatedtype.Asso_type_bad'
+    // @has foo/struct.MyStruct.html '//a/@href' '../foo/struct.MyStruct.html#associatedtype.AssoTypeBad'
 
-    /// [`Asso_type_bad`]
+    /// [`AssoTypeBad`]
     ///
-    /// [`Asso_type_bad`]: Self::Asso_type_bad
-    type Asso_type_bad = u32;
+    /// [`AssoTypeBad`]: Self::AssoTypeBad
+    type AssoTypeBad = u32;
 
     // @has foo/struct.MyStruct.html '//a/@href' '../foo/struct.MyStruct.html#ASSO_CONST_OK.v'
 
