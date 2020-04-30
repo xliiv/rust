@@ -494,7 +494,7 @@ impl<'a, 'tcx> DocFolder for LinkCollector<'a, 'tcx> {
                     if item.is_mod() && item.attrs.inner_docs { None } else { parent_node };
 
 
-                //TODO::: clean it
+                ////TODO::: rm it with impl_name?
                 //dbg!(&path_str);
                 //dbg!(&item.attrs.impl_name);
                 //let no_self = if let (true, Some(name)) = (path_str.starts_with("Self::"), item.attrs.impl_name.as_ref()) {
@@ -505,6 +505,18 @@ impl<'a, 'tcx> DocFolder for LinkCollector<'a, 'tcx> {
                 //};
                 //path_str = no_self.as_str();
                 //dbg!(&path_str);
+
+                //TODO::: clean it
+                dbg!(&item.parent_name);
+                dbg!(&path_str);
+                let no_self = if let (true, Some(name)) = (path_str.starts_with("Self::"), item.parent_name.as_ref()) {
+                    path_str.replace("Self::", &format!("{}::", name.as_str()))//.as_str()
+                } else {
+                    //TODO: use &str if possible
+                    path_str.to_string()
+                };
+                path_str = no_self.as_str();
+                dbg!(&path_str);
 
                 match kind {
                     Some(ns @ ValueNS) => {
