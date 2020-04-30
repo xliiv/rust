@@ -37,7 +37,10 @@ pub trait DocFolder: Sized {
             }
             UnionItem(mut i) => {
                 let num_fields = i.fields.len();
-                i.fields = i.fields.into_iter().filter_map(|x| self.fold_item(x)).collect();
+                i.fields = i.fields.into_iter().filter_map(|mut x| {
+                    x.parent_name = item.clone();
+                    self.fold_item(x)
+                }).collect();
                 i.fields_stripped |=
                     num_fields != i.fields.len() || i.fields.iter().any(|f| f.is_stripped());
                 UnionItem(i)
