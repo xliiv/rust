@@ -36,8 +36,6 @@ impl Bar {
 // https://doc.rust-lang.org/reference/items/implementations.html
 // https://doc.rust-lang.org/reference/items/associated-items.html
 
-// TODO::: rm it
-// has foo/struct.WithSelf.html '//a/@href' '../foo/struct.WithSelf.html#method.force_failure'
 //TODO: better name for bad, Bad, etc.
 
 pub struct MyStruct {
@@ -103,26 +101,12 @@ impl MyStruct {
 
 //TODO: fix it
 impl MyTrait for MyStruct {
-    // @has foo/struct.MyStruct.html '//a/@href' '../foo/struct.MyStruct.html#associatedtype.AssoTypeOk'
-
-    /// [`AssoTypeOk`]
-    ///
-    /// [`AssoTypeOk`]: MyTrait::AssoTypeOk
-    type AssoTypeOk = u32;
-
     // @has foo/struct.MyStruct.html '//a/@href' '../foo/struct.MyStruct.html#associatedtype.AssoTypeBad'
 
     /// [`AssoTypeBad`]
     ///
     /// [`AssoTypeBad`]: Self::AssoTypeBad
     type AssoTypeBad = u32;
-
-    // @has foo/struct.MyStruct.html '//a/@href' '../foo/struct.MyStruct.html#ASSO_CONST_OK.v'
-
-    /// [`ASSO_CONST_OK`]
-    ///
-    /// [`ASSO_CONST_OK`]: MyTrait::ASSO_CONST_OK
-    const ASSO_CONST_OK: i32 = 10;
 
     // @has foo/struct.MyStruct.html '//a/@href' '../foo/struct.MyStruct.html#ASSO_CONST_BAD.v'
 
@@ -131,30 +115,11 @@ impl MyTrait for MyStruct {
     /// [`ASSO_CONST_BAD`]: Self::ASSO_CONST_BAD
     const ASSO_CONST_BAD: i32 = 10;
 
-    // @has foo/struct.MyStruct.html '//a/@href' '../foo/struct.MyStruct.html#method.asso_fn_ok'
-
-    /// [`asso_fn_ok`]
-    ///
-    //TODO: link is broken here
-    /// [`asso_fn_ok`]: MyStruct::asso_fn_ok
-    //TODO: this points to trait, but should link to implementator like
-    // asso_fn_ok.v
-    // instead of current
-    // ../foo/trait.MyTrait.html#method.asso_fn_ok
-    fn asso_fn_ok() {
-        unimplemented!()
-    }
-
     // @has foo/struct.MyStruct.html '//a/@href' '../foo/struct.MyStruct.html#method.asso_fn_bad'
 
     /// [`asso_fn_bad`]
     ///
-    //TODO: link is broken here
     /// [`asso_fn_bad`]: Self::asso_fn_bad
-    //TODO: this points to trait, but should link to implementator like
-    // asso_fn_bad.v
-    // instead of current
-    // ../foo/trait.MyTrait.html#method.asso_fn_bad
     fn asso_fn_bad() {
         unimplemented!()
     }
