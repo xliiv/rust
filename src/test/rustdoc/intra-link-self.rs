@@ -17,11 +17,6 @@
 //TODO: do we need ok, Ok, OK variants?
 
 pub struct MyStruct {
-    /// [`struct_field_ok`]
-    ///
-    /// [`struct_field_ok`]: MyStruct::struct_field_ok
-    pub struct_field_ok: u8,
-
     // @has foo/struct.MyStruct.html '//a/@href' '../foo/struct.MyStruct.html#structfield.struct_field_bad'
 
     /// [`struct_field_bad`]
@@ -31,11 +26,6 @@ pub struct MyStruct {
 }
 
 pub enum MyEnum {
-    /// [`EnumVariantOk`]
-    ///
-    /// [`EnumVariantOk`]: MyEnum::EnumVariantOk
-    EnumVariantOk,
-
     // @has foo/enum.MyEnum.html '//a/@href' '../foo/enum.MyEnum.html#EnumVariantBad.v'
 
     /// [`EnumVariantBad`]
@@ -45,11 +35,6 @@ pub enum MyEnum {
 }
 
 pub union MyUnion {
-    /// [`union_field_ok`]
-    ///
-    /// [`union_field_ok`]: MyUnion::union_field_ok
-    pub union_field_ok: f32,
-
     // @has foo/union.MyUnion.html '//a/@href' '../foo/union.MyUnion.html#structfield.union_field_bad'
 
     /// [`union_field_bad`]
@@ -59,11 +44,6 @@ pub union MyUnion {
 }
 
 pub trait MyTrait {
-    /// [`AssoTypeOk`]
-    ///
-    /// [`AssoTypeOk`]: MyTrait::AssoTypeOk
-    type AssoTypeOk;
-
     // @has foo/trait.MyTrait.html '//a/@href' '../foo/trait.MyTrait.html#associatedtype.AssoTypeBad'
 
     /// [`AssoTypeBad`]
@@ -71,22 +51,12 @@ pub trait MyTrait {
     /// [`AssoTypeBad`]: Self::AssoTypeBad
     type AssoTypeBad;
 
-    /// [`ASSO_CONST_OK`]
-    ///
-    /// [`ASSO_CONST_OK`]: MyTrait::ASSO_CONST_OK
-    const ASSO_CONST_OK: i32 = 1;
-
     // @has foo/trait.MyTrait.html '//a/@href' '../foo/trait.MyTrait.html#associatedconstant.ASSO_CONST_BAD'
 
     /// [`ASSO_CONST_BAD`]
     ///
     /// [`ASSO_CONST_BAD`]: Self::ASSO_CONST_BAD
     const ASSO_CONST_BAD: i32 = 1;
-
-    /// [`asso_fn_ok`]
-    ///
-    /// [`asso_fn_ok`]: MyTrait::asso_fn_ok
-    fn asso_fn_ok() {}
 
     // @has foo/trait.MyTrait.html '//a/@href' '../foo/trait.MyTrait.html#method.asso_fn_bad'
 
@@ -97,13 +67,6 @@ pub trait MyTrait {
 }
 
 impl MyStruct {
-    /// [`impl_ok`]
-    ///
-    /// [`impl_ok`]: MyStruct::impl_ok
-    pub fn impl_ok() -> Self {
-        unimplemented!()
-    }
-
     // @has foo/struct.MyStruct.html '//a/@href' '../foo/struct.MyStruct.html#method.impl_bad'
 
     /// [`impl_bad`]
