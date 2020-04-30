@@ -1,5 +1,33 @@
 #![crate_name = "foo"]
 
+// @has foo/index.html '//a/@href' '../foo/struct.Foo.html#method.new'
+// @has foo/struct.Foo.html '//a/@href' '../foo/struct.Foo.html#method.new'
+
+/// Use [`new`] to create a new instance.
+///
+/// [`new`]: Self::new
+pub struct Foo;
+
+impl Foo {
+    pub fn new() -> Self {
+        unimplemented!()
+    }
+}
+
+// @has foo/index.html '//a/@href' '../foo/struct.Bar.html#method.new2'
+// @has foo/struct.Bar.html '//a/@href' '../foo/struct.Bar.html#method.new2'
+
+/// Use [`new2`] to create a new instance.
+///
+/// [`new2`]: Self::new2
+pub struct Bar;
+
+impl Bar {
+    pub fn new2() -> Self {
+        unimplemented!()
+    }
+}
+
 // TODO
 // https://doc.rust-lang.org/reference/items/structs.html
 // https://doc.rust-lang.org/reference/items/enumerations.html
@@ -10,9 +38,6 @@
 
 // TODO::: rm it
 // has foo/struct.WithSelf.html '//a/@href' '../foo/struct.WithSelf.html#method.force_failure'
-// has foo/index.html '//a/@href' '../foo/struct.Foo.html#method.new'
-// has foo/struct.Foo.html '//a/@href' '../foo/struct.Foo.html#method.new'
-
 //TODO: better name for bad, Bad, etc.
 
 pub struct MyStruct {
@@ -131,33 +156,6 @@ impl MyTrait for MyStruct {
     // instead of current
     // ../foo/trait.MyTrait.html#method.asso_fn_bad
     fn asso_fn_bad() {
-        unimplemented!()
-    }
-}
-
-
-
-/// Use [`new`] to create a new instance.
-///
-/// [`new`]: Self::new
-pub struct Foo;
-
-impl Foo {
-    pub fn new() -> Self {
-        unimplemented!()
-    }
-}
-
-// has foo/index.html '//a/@href' '../foo/struct.Bar.html#method.new2'
-// has foo/struct.Bar.html '//a/@href' '../foo/struct.Bar.html#method.new2'
-
-/// Use [`new2`] to create a new instance.
-///
-/// [`new2`]: Self::new2
-pub struct Bar;
-
-impl Bar {
-    pub fn new2() -> Self {
         unimplemented!()
     }
 }
