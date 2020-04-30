@@ -56,7 +56,10 @@ pub trait DocFolder: Sized {
                 EnumItem(i)
             }
             TraitItem(mut i) => {
-                i.items = i.items.into_iter().filter_map(|x| self.fold_item(x)).collect();
+                i.items = i.items.into_iter().filter_map(|mut x| {
+                    x.parent_name = item.clone();
+                    self.fold_item(x)
+                }).collect();
                 TraitItem(i)
             }
             ImplItem(mut i) => {
