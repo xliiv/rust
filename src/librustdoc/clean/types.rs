@@ -75,6 +75,7 @@ pub struct Item {
     pub source: Span,
     /// Not everything has a name. E.g., impls
     pub name: Option<String>,
+    // TODO: could be reference
     pub parent_name: Option<String>,
     pub attrs: Attributes,
     pub inner: ItemEnum,
