@@ -128,6 +128,7 @@ pub fn try_inline(
         stability: cx.tcx.lookup_stability(did).clean(cx),
         deprecation: cx.tcx.lookup_deprecation(did).clean(cx),
         def_id: did,
+        parent_name: None,
     });
     Some(ret)
 }
@@ -423,6 +424,7 @@ pub fn build_impl(
         stability: tcx.lookup_stability(did).clean(cx),
         deprecation: tcx.lookup_deprecation(did).clean(cx),
         def_id: did,
+        parent_name: None,
     });
 }
 
@@ -478,6 +480,7 @@ fn build_module(cx: &DocContext<'_>, did: DefId, visited: &mut FxHashSet<DefId>)
                                 did: None,
                             },
                         )),
+                        parent_name: None,
                     });
                 } else if let Some(i) = try_inline(cx, item.res, item.ident.name, None, visited) {
                     items.extend(i)

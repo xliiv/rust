@@ -20,7 +20,7 @@ pub trait DocFolder: Sized {
     }
 
     /// don't override!
-    fn fold_inner_recur(&mut self, inner: ItemEnum) -> ItemEnum {
+    fn fold_inner_recur(&mut self, inner: ItemEnum, item: &Option<String>) -> ItemEnum {
         match inner {
             StrippedItem(..) => unreachable!(),
             ModuleItem(i) => ModuleItem(self.fold_mod(i)),
@@ -85,14 +85,15 @@ pub trait DocFolder: Sized {
 
     /// don't override!
     fn fold_item_recur(&mut self, item: Item) -> Option<Item> {
-        let Item { attrs, name, source, visibility, def_id, inner, stability, deprecation } = item;
-
+        //dbg!(&item.name);
+        //dbg!(&item);
+        let Item { attrs, name, source, visibility, def_id, inner, stability, deprecation, parent_name } = item;
         let inner = match inner {
-            StrippedItem(box i) => StrippedItem(box self.fold_inner_recur(i)),
-            _ => self.fold_inner_recur(inner),
+            StrippedItem(box i) => StrippedItem(box self.fold_inner_recur(i, &name)),
+            _ => self.fold_inner_recur(inner, &name),
         };
 
-        Some(Item { attrs, name, source, inner, visibility, stability, deprecation, def_id })
+        Some(Item { attrs, name, source, inner, visibility, stability, deprecation, def_id, parent_name })
     }
 
     fn fold_mod(&mut self, m: Module) -> Module {

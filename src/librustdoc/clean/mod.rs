@@ -277,6 +277,7 @@ impl Clean<Item> for doctree::Module<'_> {
             deprecation: cx.deprecation(self.id).clean(cx),
             def_id: cx.tcx.hir().local_def_id(self.id).to_def_id(),
             inner: ModuleItem(Module { is_crate: self.is_crate, items }),
+            parent_name: None,
         }
     }
 }
@@ -917,6 +918,7 @@ impl Clean<Item> for doctree::Function<'_> {
                 all_types,
                 ret_types,
             }),
+            parent_name: None,
         }
     }
 }
@@ -1025,6 +1027,7 @@ impl Clean<Item> for doctree::Trait<'_> {
                 bounds: self.bounds.clean(cx),
                 is_auto: self.is_auto.clean(cx),
             }),
+            parent_name: None,
         }
     }
 }
@@ -1044,6 +1047,7 @@ impl Clean<Item> for doctree::TraitAlias<'_> {
                 generics: self.generics.clean(cx),
                 bounds: self.bounds.clean(cx),
             }),
+            parent_name: None,
         }
     }
 }
@@ -1122,6 +1126,7 @@ impl Clean<Item> for hir::TraitItem<'_> {
             stability: get_stability(cx, local_did.to_def_id()),
             deprecation: get_deprecation(cx, local_did.to_def_id()),
             inner,
+            parent_name: None,
         }
     }
 }
@@ -1155,6 +1160,7 @@ impl Clean<Item> for hir::ImplItem<'_> {
             stability: get_stability(cx, local_did.to_def_id()),
             deprecation: get_deprecation(cx, local_did.to_def_id()),
             inner,
+            parent_name: None,
         }
     }
 }
@@ -1327,6 +1333,7 @@ impl Clean<Item> for ty::AssocItem {
             attrs: inline::load_attrs(cx, self.def_id).clean(cx),
             source: cx.tcx.def_span(self.def_id).clean(cx),
             inner,
+            parent_name: None,
         }
     }
 }
@@ -1754,6 +1761,7 @@ impl Clean<Item> for hir::StructField<'_> {
             deprecation: get_deprecation(cx, local_did.to_def_id()),
             def_id: local_did.to_def_id(),
             inner: StructFieldItem(self.ty.clean(cx)),
+            parent_name: None,
         }
     }
 }
@@ -1769,6 +1777,7 @@ impl Clean<Item> for ty::FieldDef {
             deprecation: get_deprecation(cx, self.did),
             def_id: self.did,
             inner: StructFieldItem(cx.tcx.type_of(self.did).clean(cx)),
+            parent_name: None,
         }
     }
 }
@@ -1810,6 +1819,7 @@ impl Clean<Item> for doctree::Struct<'_> {
                 fields: self.fields.clean(cx),
                 fields_stripped: false,
             }),
+            parent_name: None,
         }
     }
 }
@@ -1830,6 +1840,7 @@ impl Clean<Item> for doctree::Union<'_> {
                 fields: self.fields.clean(cx),
                 fields_stripped: false,
             }),
+            parent_name: None,
         }
     }
 }
@@ -1859,6 +1870,7 @@ impl Clean<Item> for doctree::Enum<'_> {
                 generics: self.generics.clean(cx),
                 variants_stripped: false,
             }),
+            parent_name: None,
         }
     }
 }
@@ -1874,6 +1886,7 @@ impl Clean<Item> for doctree::Variant<'_> {
             deprecation: cx.deprecation(self.id).clean(cx),
             def_id: cx.tcx.hir().local_def_id(self.id).to_def_id(),
             inner: VariantItem(Variant { kind: self.def.clean(cx) }),
+            parent_name: None,
         }
     }
 }
@@ -1900,6 +1913,7 @@ impl Clean<Item> for ty::VariantDef {
                         stability: get_stability(cx, field.did),
                         deprecation: get_deprecation(cx, field.did),
                         inner: StructFieldItem(cx.tcx.type_of(field.did).clean(cx)),
+                        parent_name: None,
                     })
                     .collect(),
             }),
@@ -1913,6 +1927,7 @@ impl Clean<Item> for ty::VariantDef {
             inner: VariantItem(Variant { kind }),
             stability: get_stability(cx, self.def_id),
             deprecation: get_deprecation(cx, self.def_id),
+            parent_name: None,
         }
     }
 }
@@ -2026,6 +2041,7 @@ impl Clean<Item> for doctree::Typedef<'_> {
             stability: cx.stability(self.id).clean(cx),
             deprecation: cx.deprecation(self.id).clean(cx),
             inner: TypedefItem(Typedef { type_, generics: self.gen.clean(cx), item_type }, false),
+            parent_name: None,
         }
     }
 }
@@ -2047,6 +2063,7 @@ impl Clean<Item> for doctree::OpaqueTy<'_> {
                 },
                 false,
             ),
+            parent_name: None,
         }
     }
 }
@@ -2076,6 +2093,7 @@ impl Clean<Item> for doctree::Static<'_> {
                 mutability: self.mutability,
                 expr: print_const_expr(cx, self.expr),
             }),
+            parent_name: None,
         }
     }
 }
@@ -2098,6 +2116,7 @@ impl Clean<Item> for doctree::Constant<'_> {
                 value: print_evaluated_const(cx, def_id.to_def_id()),
                 is_literal: is_literal_expr(cx, self.expr.hir_id),
             }),
+            parent_name: None,
         }
     }
 }
@@ -2157,6 +2176,7 @@ impl Clean<Vec<Item>> for doctree::Impl<'_> {
                 synthetic: false,
                 blanket_impl: None,
             }),
+            parent_name: None,
         };
         if let Some(type_alias) = type_alias {
             ret.push(make_item(trait_.clone(), type_alias, items.clone()));
@@ -2198,6 +2218,7 @@ impl Clean<Vec<Item>> for doctree::ExternCrate<'_> {
             stability: None,
             deprecation: None,
             inner: ExternCrateItem(self.name.clean(cx), self.path.clone()),
+            parent_name: None,
         }]
     }
 }
@@ -2263,6 +2284,7 @@ impl Clean<Vec<Item>> for doctree::Import<'_> {
             stability: None,
             deprecation: None,
             inner: ImportItem(inner),
+            parent_name: None,
         }]
     }
 }
@@ -2305,6 +2327,7 @@ impl Clean<Item> for doctree::ForeignItem<'_> {
             stability: cx.stability(self.id).clean(cx),
             deprecation: cx.deprecation(self.id).clean(cx),
             inner,
+            parent_name: None,
         }
     }
 }
@@ -2331,6 +2354,7 @@ impl Clean<Item> for doctree::Macro<'_> {
                 ),
                 imported_from: self.imported_from.clean(cx),
             }),
+            parent_name: None,
         }
     }
 }
@@ -2346,6 +2370,7 @@ impl Clean<Item> for doctree::ProcMacro<'_> {
             deprecation: cx.deprecation(self.id).clean(cx),
             def_id: cx.tcx.hir().local_def_id(self.id).to_def_id(),
             inner: ProcMacroItem(ProcMacro { kind: self.kind, helpers: self.helpers.clean(cx) }),
+            parent_name: None,
         }
     }
 }

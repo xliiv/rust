@@ -74,6 +74,7 @@ pub fn krate(mut cx: &mut DocContext<'_>) -> Crate {
             deprecation: get_deprecation(cx, def_id),
             def_id,
             inner: ItemEnum::PrimitiveItem(prim),
+            parent_name: None,
         }));
         m.items.extend(keywords.into_iter().map(|(def_id, kw, attrs)| Item {
             source: Span::empty(),
@@ -84,6 +85,7 @@ pub fn krate(mut cx: &mut DocContext<'_>) -> Crate {
             deprecation: get_deprecation(cx, def_id),
             def_id,
             inner: ItemEnum::KeywordItem(kw),
+            parent_name: None,
         }));
     }
 

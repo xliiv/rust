@@ -136,6 +136,7 @@ impl<'a, 'tcx> AutoTraitFinder<'a, 'tcx> {
                         synthetic: true,
                         blanket_impl: None,
                     }),
+                    parent_name: None,
                 })
             })
             .collect()
