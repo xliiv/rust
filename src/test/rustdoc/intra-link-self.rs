@@ -28,7 +28,7 @@ impl Bar {
     }
 }
 
-// TODO
+// TODO rm it
 // https://doc.rust-lang.org/reference/items/structs.html
 // https://doc.rust-lang.org/reference/items/enumerations.html
 // https://doc.rust-lang.org/reference/items/unions.html
@@ -36,91 +36,89 @@ impl Bar {
 // https://doc.rust-lang.org/reference/items/implementations.html
 // https://doc.rust-lang.org/reference/items/associated-items.html
 
-//TODO: better name for bad, Bad, etc.
-
 pub struct MyStruct {
-    // @has foo/struct.MyStruct.html '//a/@href' '../foo/struct.MyStruct.html#structfield.struct_field_bad'
+    // @has foo/struct.MyStruct.html '//a/@href' '../foo/struct.MyStruct.html#structfield.struct_field'
 
-    /// [`struct_field_bad`]
+    /// [`struct_field`]
     ///
-    /// [`struct_field_bad`]: Self::struct_field_bad
-    pub struct_field_bad: u8,
+    /// [`struct_field`]: Self::struct_field
+    pub struct_field: u8,
 }
 
 pub enum MyEnum {
-    // @has foo/enum.MyEnum.html '//a/@href' '../foo/enum.MyEnum.html#EnumVariantBad.v'
+    // @has foo/enum.MyEnum.html '//a/@href' '../foo/enum.MyEnum.html#EnumVariant.v'
 
-    /// [`EnumVariantBad`]
+    /// [`EnumVariant`]
     ///
-    /// [`EnumVariantBad`]: Self::EnumVariantBad
-    EnumVariantBad,
+    /// [`EnumVariant`]: Self::EnumVariant
+    EnumVariant,
 }
 
 pub union MyUnion {
-    // @has foo/union.MyUnion.html '//a/@href' '../foo/union.MyUnion.html#structfield.union_field_bad'
+    // @has foo/union.MyUnion.html '//a/@href' '../foo/union.MyUnion.html#structfield.union_field'
 
-    /// [`union_field_bad`]
+    /// [`union_field`]
     ///
-    /// [`union_field_bad`]: Self::union_field_bad
-    pub union_field_bad: f32,
+    /// [`union_field`]: Self::union_field
+    pub union_field: f32,
 }
 
 pub trait MyTrait {
-    // @has foo/trait.MyTrait.html '//a/@href' '../foo/trait.MyTrait.html#associatedtype.AssoTypeBad'
+    // @has foo/trait.MyTrait.html '//a/@href' '../foo/trait.MyTrait.html#associatedtype.AssoType'
 
-    /// [`AssoTypeBad`]
+    /// [`AssoType`]
     ///
-    /// [`AssoTypeBad`]: Self::AssoTypeBad
-    type AssoTypeBad;
+    /// [`AssoType`]: Self::AssoType
+    type AssoType;
 
-    // @has foo/trait.MyTrait.html '//a/@href' '../foo/trait.MyTrait.html#associatedconstant.ASSO_CONST_BAD'
+    // @has foo/trait.MyTrait.html '//a/@href' '../foo/trait.MyTrait.html#associatedconstant.ASSO_CONST'
 
-    /// [`ASSO_CONST_BAD`]
+    /// [`ASSO_CONST`]
     ///
-    /// [`ASSO_CONST_BAD`]: Self::ASSO_CONST_BAD
-    const ASSO_CONST_BAD: i32 = 1;
+    /// [`ASSO_CONST`]: Self::ASSO_CONST
+    const ASSO_CONST: i32 = 1;
 
-    // @has foo/trait.MyTrait.html '//a/@href' '../foo/trait.MyTrait.html#method.asso_fn_bad'
+    // @has foo/trait.MyTrait.html '//a/@href' '../foo/trait.MyTrait.html#method.asso_fn'
 
-    /// [`asso_fn_bad`]
+    /// [`asso_fn`]
     ///
-    /// [`asso_fn_bad`]: Self::asso_fn_bad
-    fn asso_fn_bad() {}
+    /// [`asso_fn`]: Self::asso_fn
+    fn asso_fn() {}
 }
 
 impl MyStruct {
-    // @has foo/struct.MyStruct.html '//a/@href' '../foo/struct.MyStruct.html#method.impl_bad'
+    // @has foo/struct.MyStruct.html '//a/@href' '../foo/struct.MyStruct.html#method.for_impl'
 
-    /// [`impl_bad`]
+    /// [`for_impl`]
     ///
-    /// [`impl_bad`]: Self::impl_bad
-    pub fn impl_bad() -> Self {
+    /// [`for_impl`]: Self::for_impl
+    pub fn for_impl() -> Self {
         unimplemented!()
     }
 }
 
 //TODO: fix it
 impl MyTrait for MyStruct {
-    // @has foo/struct.MyStruct.html '//a/@href' '../foo/struct.MyStruct.html#associatedtype.AssoTypeBad'
+    // @has foo/struct.MyStruct.html '//a/@href' '../foo/struct.MyStruct.html#associatedtype.AssoType'
 
-    /// [`AssoTypeBad`]
+    /// [`AssoType`]
     ///
-    /// [`AssoTypeBad`]: Self::AssoTypeBad
-    type AssoTypeBad = u32;
+    /// [`AssoType`]: Self::AssoType
+    type AssoType = u32;
 
-    // @has foo/struct.MyStruct.html '//a/@href' '../foo/struct.MyStruct.html#ASSO_CONST_BAD.v'
+    // @has foo/struct.MyStruct.html '//a/@href' '../foo/struct.MyStruct.html#ASSO_CONST.v'
 
-    /// [`ASSO_CONST_BAD`]
+    /// [`ASSO_CONST`]
     ///
-    /// [`ASSO_CONST_BAD`]: Self::ASSO_CONST_BAD
-    const ASSO_CONST_BAD: i32 = 10;
+    /// [`ASSO_CONST`]: Self::ASSO_CONST
+    const ASSO_CONST: i32 = 10;
 
-    // @has foo/struct.MyStruct.html '//a/@href' '../foo/struct.MyStruct.html#method.asso_fn_bad'
+    // @has foo/struct.MyStruct.html '//a/@href' '../foo/struct.MyStruct.html#method.asso_fn'
 
-    /// [`asso_fn_bad`]
+    /// [`asso_fn`]
     ///
-    /// [`asso_fn_bad`]: Self::asso_fn_bad
-    fn asso_fn_bad() {
+    /// [`asso_fn`]: Self::asso_fn
+    fn asso_fn() {
         unimplemented!()
     }
 }
