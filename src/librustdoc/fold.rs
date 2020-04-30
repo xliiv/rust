@@ -63,19 +63,15 @@ pub trait DocFolder: Sized {
                 TraitItem(i)
             }
             ImplItem(mut i) => {
-                let impl_name = if let Type::ResolvedPath { path, .. } = &i.for_ {
+                let parent_name = if let Type::ResolvedPath { path, .. } = &i.for_ {
                     path.segments.first().map(|segment| segment.name.clone())
                 } else {
                     None
                 };
-                i.items = i
-                    .items
-                    .into_iter()
-                    .filter_map(|mut x| {
-                        x.attrs.impl_name = impl_name.clone();
-                        self.fold_item(x)
-                    })
-                    .collect();
+                i.items = i.items.into_iter().filter_map(|mut x| {
+                    x.parent_name = parent_name.clone();
+                    self.fold_item(x)
+                }).collect();
                 ImplItem(i)
             }
             VariantItem(i) => {
@@ -98,7 +94,7 @@ pub trait DocFolder: Sized {
     /// don't override!
     fn fold_item_recur(&mut self, item: Item) -> Option<Item> {
         //dbg!(&item.name);
-        //dbg!(&item);
+        dbg!(&item);
         let Item { attrs, name, source, visibility, def_id, inner, stability, deprecation, parent_name } = item;
         let inner = match inner {
             StrippedItem(box i) => StrippedItem(box self.fold_inner_recur(i, &name)),
