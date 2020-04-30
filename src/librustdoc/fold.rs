@@ -44,7 +44,10 @@ pub trait DocFolder: Sized {
             }
             EnumItem(mut i) => {
                 let num_variants = i.variants.len();
-                i.variants = i.variants.into_iter().filter_map(|x| self.fold_item(x)).collect();
+                i.variants = i.variants.into_iter().filter_map(|mut x| {
+                    x.parent_name = item.clone();
+                    self.fold_item(x)
+                }).collect();
                 i.variants_stripped |=
                     num_variants != i.variants.len() || i.variants.iter().any(|f| f.is_stripped());
                 EnumItem(i)
